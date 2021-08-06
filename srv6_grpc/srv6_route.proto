@@ -1,0 +1,33 @@
+
+syntax = 'proto3';
+
+enum Seg6Mode {
+  INLINE = 0;
+  ENCAP = 1;
+}
+
+message Seg6RouteRequest {
+  string destination = 1;
+  message Segment {
+    string segment = 1;
+  }
+  repeated Segment segments = 2;
+  Seg6Mode seg6Mode = 3;
+  string dev = 4;
+}
+
+message Seg6RouteReply {
+  uint32 status = 1;
+}
+
+message ShowRoutes6Request {
+}
+
+message ShowRoutes6Reply {
+}
+
+service Seg6Service {
+  rpc AddRoute(Seg6RouteRequest) returns (Seg6RouteReply);
+  rpc RemoveRoute(Seg6RouteRequest) returns (Seg6RouteReply);
+  rpc ShowRoute(ShowRoutes6Request) returns (ShowRoutes6Reply);
+}
