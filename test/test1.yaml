@@ -1,0 +1,27 @@
+nodes:
+  - name: r1
+    ip: 0.0.0.0
+    port: 3000
+    encap:
+      - destination: 192.168.1.0/24
+        mode: encap
+        segments: [a::2]
+        dev: r1_r2
+    decap:
+      - destination: a::1
+        action: End.DX4
+        nh4: "192.168.0.1"
+        dev: r1_h1
+  - name: r2
+    ip: 0.0.0.0
+    port: 3001
+    encap:
+      - destination: 192.168.0.0/24
+        mode: encap
+        segments: [a::1]
+        dev: r2_r1
+    decap:
+      - destination: a::2
+        action: End.DX4
+        nh4: "192.168.1.1"
+        dev: r2_h2

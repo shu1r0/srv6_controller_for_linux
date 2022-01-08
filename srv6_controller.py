@@ -1,55 +1,210 @@
-from logging import INFO, getLogger
+from logging import INFO, DEBUG, getLogger
+import argparse
+import yaml
+import time
+import threading
 
 from srv6_grpc.srv6_client import SRv6Client
 from utils.log import get_stream_handler, get_file_handler
 
 
 class SRv6Node(SRv6Client):
+    """SRv6 Node
 
-    def __init__(self, name, ip, port):
-        super(SRv6Node, self).__init__(ip, port)
+    Attributes:
+        name (string) : node name
+    """
+
+    def __init__(self, name, ip, port, logger=None):
+        if logger is None:
+            logger = getLogger(__name__)
+        super(SRv6Node, self).__init__(ip, port, logger)
         self.name = name
 
+    def __str__(self):
+        return self.name
 
-class SRv6Controller:
+    def __repr__(self):
+        return "<Node name={} ip={} port={}>".format(self.name, self.ip, self.port)
 
-    def __init__(self, yml_file=None, log_level=INFO, log_file=None):
-        self.nodes = []
-        self._yml_file = yml_file
 
-        self.logger = getLogger(__name__)
-        self.logger.setLevel(log_level)
-        self.logger.addHandler(get_stream_handler(log_level))
-        if log_file:
-            self.logger.addHandler(get_file_handler(log_file, log_level))
+class SRv6ControllerBase:
+    """SRv6 Controller"""
 
-    def register_node(self, name, ip, port):
-        node = SRv6Node(name, ip, port)
+    def __init__(self, logger=None):
+        self.nodes: list[SRv6Node] = []
+        self.logger = logger
+
+    def add_node(self, name, ip, port):
+        """add SRv6 Node
+
+        Args:
+            name (str) : node name
+            ip (str) : node ip address
+            port (str or int) : node port number
+
+        Returns:
+            SRv6Node
+        """
+        node = SRv6Node(name, ip, port, logger=self.logger)
         self.nodes.append(node)
+        return node
 
-    def get(self, name):
-        for n in self.nodes:
-            if name == n.name:
-                return n
+    def get(self, node):
+        """get SRv6 Node
+
+        Args:
+            node (str or SRv6Node) : node name
+
+        Returns:
+            SRv6Node
+        """
+        if isinstance(node, SRv6Node):
+            return node
+        if isinstance(node, str):
+            for n in self.nodes:
+                if node == n.name:
+                    return n
         raise KeyError
 
     def connect(self, name):
+        """connect to node
+
+        Args:
+            name (str) :
+        """
         self.logger.info("gRPC client connect to server(ip={}, port={})".format(self.get(name).ip, self.get(name).port))
-        self.get(name).establish_channel()
+        node = self.get(name)
+        node.establish_channel()
 
-    def add_route(self, name, destination, segments, seg6_mode, dev):
-        self.get(name).add_route(destination, segments, seg6_mode, dev)
+    def is_connected(self, name):
+        """Is connected to the node
 
-    def remove_route(self, name, destination, segments, seg6_mode, dev):
-        self.get(name).remove_route(destination, segments, seg6_mode, dev)
+        Args:
+            name (str) :
 
-    def read_yml(self, yml_file=None):
+        Returns:
+            bool
+        """
+        return self.get(name).has_established_channel()
+
+    def connect_all(self):
+        """
+        connect all node
+        """
+        for node in self.nodes:
+            if not self.is_connected(node.name):
+                self.connect(node.name)
+
+    def close_all(self):
+        for node in self.nodes:
+            node.close_channel()
+
+    def add_route(self, name, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
+        self.get(name).add_route(destination, gateway, dev, metric, table, encap)
+
+    def remove_route(self, name, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
+        self.get(name).remove_route(destination, gateway, dev, metric, table, encap)
+
+    def start(self):
+        pass
+        # read yml
+        # connect
+        # add route from config
+
+    def stop(self):
+        self.close_all()
+
+
+class SRv6Controller(SRv6ControllerBase):
+    """SRv6 Controller"""
+
+    def __init__(self, yml_file=None, logger=None):
+        super(SRv6Controller, self).__init__(logger=logger)
+        self._yml_file = yml_file
+        self._route_conf: list = []
+        if self._yml_file:
+            self._read_yml()
+
+        self.logger = logger if logger else getLogger(__name__)
+
+    def _read_yml(self, yml_file=None):
         if yml_file is None:
             yml_file = self._yml_file
+            with open(yml_file) as f:
+                dct = yaml.safe_load(f)
+                nodes = dct.get('nodes')
+                for node in nodes:
+                    name = node.get('name')
+                    ip = node.get('ip')
+                    port = node.get('port')
+                    routes = node.get('route', [])
+                    encap_routes = node.get('encap', [])
+                    decap_routes = node.get('decap', [])
+
+                    self.add_node(name, ip, port)
+
+                    for route in routes:
+                        route['name'] = name
+                        self._route_conf.append(route)
+                    for route in encap_routes:
+                        route['name'] = name
+                        encap = {
+                            'type': 'seg6',
+                            'mode': route.pop('mode', None),
+                            'segments': route.pop('segments', None)
+                        }
+                        route['encap'] = encap
+                        self._route_conf.append(route)
+                    for route in decap_routes:
+                        route['name'] = name
+                        decap = {
+                            'type': 'seg6local',
+                            'action': route.pop('action', None),
+                            'nh6': route.pop('nh6', None),
+                            'srh': route.pop('srh', None)
+                        }
+                        if decap.get('srh'):
+                            decap['srh'] = {
+                                'segments': decap['srh'].get('segment'),
+                                'hmac': decap['srh'].get('hmac')
+                            }
+                        route['encap'] = decap
+                        self._route_conf.append(route)
+
+    def start(self):
+        self.logger.info("start controller (nodes = {})".format(self.nodes))
+        self.connect_all()
+        time.sleep(1)
+        for route in self._route_conf:
+            self.add_route(**route)
+
+    def stop(self):
         pass
 
 
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('--log_file', help="log file path")
+    parser.add_argument('--config', help="config yml path")
+
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == '__main__':
-    controller = SRv6Controller()
-    controller.register_node('R1', '127.0.0.1', '8889')
-    controller.connect('R1')
+    args = get_args()
+    # print(args)
+    log_level = DEBUG if args.verbose else INFO
+    yml_file = args.config
+    log_file = args.log_file
+
+    logger = getLogger(__name__)
+    logger.setLevel(log_level)
+    logger.addHandler(get_stream_handler(log_level))
+    if log_file:
+        logger.addHandler(get_file_handler(log_file, log_level))
+
+    controller = SRv6Controller(yml_file=yml_file, logger=logger)
+    controller.start()

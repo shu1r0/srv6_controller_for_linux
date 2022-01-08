@@ -6,7 +6,9 @@ import srv6_route_pb2 as srv6__route__pb2
 
 
 class Seg6ServiceStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """*
+    Route Service on Agent
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -16,13 +18,13 @@ class Seg6ServiceStub(object):
         """
         self.AddRoute = channel.unary_unary(
                 '/Seg6Service/AddRoute',
-                request_serializer=srv6__route__pb2.Seg6RouteRequest.SerializeToString,
-                response_deserializer=srv6__route__pb2.Seg6RouteReply.FromString,
+                request_serializer=srv6__route__pb2.Route.SerializeToString,
+                response_deserializer=srv6__route__pb2.RouteReply.FromString,
                 )
         self.RemoveRoute = channel.unary_unary(
                 '/Seg6Service/RemoveRoute',
-                request_serializer=srv6__route__pb2.Seg6RouteRequest.SerializeToString,
-                response_deserializer=srv6__route__pb2.Seg6RouteReply.FromString,
+                request_serializer=srv6__route__pb2.Route.SerializeToString,
+                response_deserializer=srv6__route__pb2.RouteReply.FromString,
                 )
         self.ShowRoute = channel.unary_unary(
                 '/Seg6Service/ShowRoute',
@@ -32,7 +34,9 @@ class Seg6ServiceStub(object):
 
 
 class Seg6ServiceServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """*
+    Route Service on Agent
+    """
 
     def AddRoute(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -57,13 +61,13 @@ def add_Seg6ServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'AddRoute': grpc.unary_unary_rpc_method_handler(
                     servicer.AddRoute,
-                    request_deserializer=srv6__route__pb2.Seg6RouteRequest.FromString,
-                    response_serializer=srv6__route__pb2.Seg6RouteReply.SerializeToString,
+                    request_deserializer=srv6__route__pb2.Route.FromString,
+                    response_serializer=srv6__route__pb2.RouteReply.SerializeToString,
             ),
             'RemoveRoute': grpc.unary_unary_rpc_method_handler(
                     servicer.RemoveRoute,
-                    request_deserializer=srv6__route__pb2.Seg6RouteRequest.FromString,
-                    response_serializer=srv6__route__pb2.Seg6RouteReply.SerializeToString,
+                    request_deserializer=srv6__route__pb2.Route.FromString,
+                    response_serializer=srv6__route__pb2.RouteReply.SerializeToString,
             ),
             'ShowRoute': grpc.unary_unary_rpc_method_handler(
                     servicer.ShowRoute,
@@ -78,7 +82,9 @@ def add_Seg6ServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class Seg6Service(object):
-    """Missing associated documentation comment in .proto file."""
+    """*
+    Route Service on Agent
+    """
 
     @staticmethod
     def AddRoute(request,
@@ -92,8 +98,8 @@ class Seg6Service(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Seg6Service/AddRoute',
-            srv6__route__pb2.Seg6RouteRequest.SerializeToString,
-            srv6__route__pb2.Seg6RouteReply.FromString,
+            srv6__route__pb2.Route.SerializeToString,
+            srv6__route__pb2.RouteReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -109,8 +115,8 @@ class Seg6Service(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Seg6Service/RemoveRoute',
-            srv6__route__pb2.Seg6RouteRequest.SerializeToString,
-            srv6__route__pb2.Seg6RouteReply.FromString,
+            srv6__route__pb2.Route.SerializeToString,
+            srv6__route__pb2.RouteReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -1,33 +1,114 @@
 
 syntax = 'proto3';
 
+
+/**
+ * Encap type for SRv6
+ */
+enum Seg6Type {
+  /// encapsulation type IPv6 Segment
+  SEG6 = 0;
+  // local SRv6 segment processing
+  SEG6LOCAL = 1;
+}
+
+/**
+ * segment routing mode
+ */
 enum Seg6Mode {
+  // Directly insert Segment Routing Header after IPv6 header
   INLINE = 0;
+  // Encapsulation packet in an outer IPv6 header with SRH
   ENCAP = 1;
+  // Encapsulate ingress L2 frame within an outer IPv6 header and IPv6
+  L2ENCAP = 2;
 }
 
-message Seg6RouteRequest {
+/**
+ * Seg6 local action
+ */
+enum Seg6LocalAction{
+  // Regular SRv6 processing as intermediate segment endpoint.
+  END = 0;
+  // Regular SRv6 processing as intermediate segment  endpoint.
+  // Additionally, forward processed packets to given next-hop.
+  // This action only accepts packets with a nonzero Segments Left value.
+  // Other matching packets are dropped.
+  END_X = 1;
+  END_DX4 = 2;
+  // Decapsulate inner IPv6 packet and forward it to the specified next-hop.
+  // If the argument is set to ::, then the next-hop is selection according to the local selection rules.
+  END_DX6 = 3;
+  END_B6 = 4;
+  END_B6_ENCAPS = 5;
+}
+
+/**
+ * Route Config
+ */
+message Route {
+  // network or default
   string destination = 1;
-  message Segment {
-    string segment = 1;
+  optional string gateway = 2;
+  optional string dev = 3;
+  optional int32 metric = 4;
+  optional int32 table = 5;
+
+  oneof encap {
+    Seg6Encap seg6_encap = 10;
+    Seg6LocalEncap seg6local_encap = 11;
   }
-  repeated Segment segments = 2;
-  Seg6Mode seg6Mode = 3;
-  string dev = 4;
 }
 
-message Seg6RouteReply {
+/**
+ * SRv6 Config
+ */
+message Seg6Encap {
+  Seg6Type type = 1;
+  Seg6Mode mode = 2;
+  repeated string segments = 3;
+}
+
+/**
+ * Seg6Local Config
+ *
+ * Operation to perform on matching packets.
+ */
+message Seg6LocalEncap {
+  Seg6Type type = 1;
+  Seg6LocalAction action = 2;
+  oneof param {
+    string nh6 = 10;  // next hop
+    string nh4 = 11;
+    Srh srh = 12;
+  }
+
+  message Srh {
+    repeated string segments = 1;
+    optional string hmac = 2;
+  }
+}
+
+/**
+ * Reply for Route Request
+ */
+message RouteReply {
   uint32 status = 1;
 }
 
 message ShowRoutes6Request {
+  // Not implemented
 }
 
 message ShowRoutes6Reply {
+  // Not implemented
 }
 
+/**
+ * Route Service on Agent
+ */
 service Seg6Service {
-  rpc AddRoute(Seg6RouteRequest) returns (Seg6RouteReply);
-  rpc RemoveRoute(Seg6RouteRequest) returns (Seg6RouteReply);
+  rpc AddRoute(Route) returns (RouteReply);
+  rpc RemoveRoute(Route) returns (RouteReply);
   rpc ShowRoute(ShowRoutes6Request) returns (ShowRoutes6Reply);
 }

@@ -1,4 +1,5 @@
-from logging import getLogger, INFO
+from logging import getLogger, INFO, DEBUG
+import argparse
 from concurrent import futures
 import grpc
 
@@ -16,9 +17,11 @@ class SRv6Agent:
         server (grpc.Server) : gRPC server
         ip (str) : server ip address
         port (str) : listening port
+        logger (Logger) : logger
     """
 
     def __init__(self, ip, port, log_level=INFO, log_file=None):
+        # set logger
         self.logger = getLogger(__name__)
         self.logger.setLevel(log_level)
         self.logger.addHandler(get_stream_handler(log_level))
@@ -30,6 +33,9 @@ class SRv6Agent:
         self.ip = ip
         self.port = port
 
+    def __del__(self):
+        self.stop()
+
     def start(self):
         """start server"""
         self.logger.info("server start (ip={}, port={})".format(self.ip, self.port))
@@ -39,13 +45,38 @@ class SRv6Agent:
         )
         self.server.add_insecure_port(self.ip + ':' + self.port)
         self.server.start()
+        self.server.wait_for_termination()
 
     def stop(self):
         """stop server"""
         self.logger.info("server stop (ip={}, port={})".format(self.ip, self.port))
-        self.server.stop(grace=None)
+        if self.server:
+            self.server.stop(grace=None)
+
+
+def get_args():
+    """get args from command line"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('--log_file', help="log file path")
+
+    parser.add_argument('--ip', help='server ip address', default="[::]")
+    parser.add_argument('--port', help='listening port')
+
+    args = parser.parse_args()
+    return args
 
 
 if __name__ == '__main__':
-    agent = SRv6Agent(ip='127.0.0.1', port='50051')
+    args = get_args()
+    if args.verbose:
+        log_level = DEBUG
+    else:
+        log_level = INFO
+    log_file = args.log_file
+
+    ip = args.ip
+    port = args.port
+
+    agent = SRv6Agent(ip=ip, port=port, log_level=log_level, log_file=log_file)
     agent.start()
