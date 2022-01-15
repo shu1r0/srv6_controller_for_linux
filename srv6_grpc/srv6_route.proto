@@ -6,10 +6,11 @@ syntax = 'proto3';
  * Encap type for SRv6
  */
 enum Seg6Type {
+  UNKNOWN = 0;
   /// encapsulation type IPv6 Segment
-  SEG6 = 0;
+  SEG6 = 1;
   // local SRv6 segment processing
-  SEG6LOCAL = 1;
+  SEG6LOCAL = 2;
 }
 
 /**

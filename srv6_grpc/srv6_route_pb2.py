@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x10srv6_route.proto\"\xed\x01\n\x05Route\x12\x13\n\x0b\x64\x65stination\x18\x01 \x01(\t\x12\x14\n\x07gateway\x18\x02 \x01(\tH\x01\x88\x01\x01\x12\x10\n\x03\x64\x65v\x18\x03 \x01(\tH\x02\x88\x01\x01\x12\x13\n\x06metric\x18\x04 \x01(\x05H\x03\x88\x01\x01\x12\x12\n\x05table\x18\x05 \x01(\x05H\x04\x88\x01\x01\x12 \n\nseg6_encap\x18\n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18\x0b \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x42\x07\n\x05\x65ncapB\n\n\x08_gatewayB\x06\n\x04_devB\t\n\x07_metricB\x08\n\x06_table\"O\n\tSeg6Encap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12\x17\n\x04mode\x18\x02 \x01(\x0e\x32\t.Seg6Mode\x12\x10\n\x08segments\x18\x03 \x03(\t\"\xcb\x01\n\x0eSeg6LocalEncap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12 \n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x10.Seg6LocalAction\x12\r\n\x03nh6\x18\n \x01(\tH\x00\x12\r\n\x03nh4\x18\x0b \x01(\tH\x00\x12\"\n\x03srh\x18\x0c \x01(\x0b\x32\x13.Seg6LocalEncap.SrhH\x00\x1a\x33\n\x03Srh\x12\x10\n\x08segments\x18\x01 \x03(\t\x12\x11\n\x04hmac\x18\x02 \x01(\tH\x00\x88\x01\x01\x42\x07\n\x05_hmacB\x07\n\x05param\"\x1c\n\nRouteReply\x12\x0e\n\x06status\x18\x01 \x01(\r\"\x14\n\x12ShowRoutes6Request\"\x12\n\x10ShowRoutes6Reply*#\n\x08Seg6Type\x12\x08\n\x04SEG6\x10\x00\x12\r\n\tSEG6LOCAL\x10\x01*.\n\x08Seg6Mode\x12\n\n\x06INLINE\x10\x00\x12\t\n\x05\x45NCAP\x10\x01\x12\x0b\n\x07L2ENCAP\x10\x02*^\n\x0fSeg6LocalAction\x12\x07\n\x03\x45ND\x10\x00\x12\t\n\x05\x45ND_X\x10\x01\x12\x0b\n\x07\x45ND_DX4\x10\x02\x12\x0b\n\x07\x45ND_DX6\x10\x03\x12\n\n\x06\x45ND_B6\x10\x04\x12\x11\n\rEND_B6_ENCAPS\x10\x05\x32\x87\x01\n\x0bSeg6Service\x12\x1f\n\x08\x41\x64\x64Route\x12\x06.Route\x1a\x0b.RouteReply\x12\"\n\x0bRemoveRoute\x12\x06.Route\x1a\x0b.RouteReply\x12\x33\n\tShowRoute\x12\x13.ShowRoutes6Request\x1a\x11.ShowRoutes6Replyb\x06proto3'
+  serialized_pb=b'\n\x10srv6_route.proto\"\xed\x01\n\x05Route\x12\x13\n\x0b\x64\x65stination\x18\x01 \x01(\t\x12\x14\n\x07gateway\x18\x02 \x01(\tH\x01\x88\x01\x01\x12\x10\n\x03\x64\x65v\x18\x03 \x01(\tH\x02\x88\x01\x01\x12\x13\n\x06metric\x18\x04 \x01(\x05H\x03\x88\x01\x01\x12\x12\n\x05table\x18\x05 \x01(\x05H\x04\x88\x01\x01\x12 \n\nseg6_encap\x18\n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18\x0b \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x42\x07\n\x05\x65ncapB\n\n\x08_gatewayB\x06\n\x04_devB\t\n\x07_metricB\x08\n\x06_table\"O\n\tSeg6Encap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12\x17\n\x04mode\x18\x02 \x01(\x0e\x32\t.Seg6Mode\x12\x10\n\x08segments\x18\x03 \x03(\t\"\xcb\x01\n\x0eSeg6LocalEncap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12 \n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x10.Seg6LocalAction\x12\r\n\x03nh6\x18\n \x01(\tH\x00\x12\r\n\x03nh4\x18\x0b \x01(\tH\x00\x12\"\n\x03srh\x18\x0c \x01(\x0b\x32\x13.Seg6LocalEncap.SrhH\x00\x1a\x33\n\x03Srh\x12\x10\n\x08segments\x18\x01 \x03(\t\x12\x11\n\x04hmac\x18\x02 \x01(\tH\x00\x88\x01\x01\x42\x07\n\x05_hmacB\x07\n\x05param\"\x1c\n\nRouteReply\x12\x0e\n\x06status\x18\x01 \x01(\r\"\x14\n\x12ShowRoutes6Request\"\x12\n\x10ShowRoutes6Reply*0\n\x08Seg6Type\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04SEG6\x10\x01\x12\r\n\tSEG6LOCAL\x10\x02*.\n\x08Seg6Mode\x12\n\n\x06INLINE\x10\x00\x12\t\n\x05\x45NCAP\x10\x01\x12\x0b\n\x07L2ENCAP\x10\x02*^\n\x0fSeg6LocalAction\x12\x07\n\x03\x45ND\x10\x00\x12\t\n\x05\x45ND_X\x10\x01\x12\x0b\n\x07\x45ND_DX4\x10\x02\x12\x0b\n\x07\x45ND_DX6\x10\x03\x12\n\n\x06\x45ND_B6\x10\x04\x12\x11\n\rEND_B6_ENCAPS\x10\x05\x32\x87\x01\n\x0bSeg6Service\x12\x1f\n\x08\x41\x64\x64Route\x12\x06.Route\x1a\x0b.RouteReply\x12\"\n\x0bRemoveRoute\x12\x06.Route\x1a\x0b.RouteReply\x12\x33\n\tShowRoute\x12\x13.ShowRoutes6Request\x1a\x11.ShowRoutes6Replyb\x06proto3'
 )
 
 _SEG6TYPE = _descriptor.EnumDescriptor(
@@ -31,12 +31,17 @@ _SEG6TYPE = _descriptor.EnumDescriptor(
   create_key=_descriptor._internal_create_key,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='SEG6', index=0, number=0,
+      name='UNKNOWN', index=0, number=0,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='SEG6LOCAL', index=1, number=1,
+      name='SEG6', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='SEG6LOCAL', index=2, number=2,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
@@ -44,7 +49,7 @@ _SEG6TYPE = _descriptor.EnumDescriptor(
   containing_type=None,
   serialized_options=None,
   serialized_start=619,
-  serialized_end=654,
+  serialized_end=667,
 )
 _sym_db.RegisterEnumDescriptor(_SEG6TYPE)
 
@@ -74,8 +79,8 @@ _SEG6MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=656,
-  serialized_end=702,
+  serialized_start=669,
+  serialized_end=715,
 )
 _sym_db.RegisterEnumDescriptor(_SEG6MODE)
 
@@ -120,14 +125,15 @@ _SEG6LOCALACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=704,
-  serialized_end=798,
+  serialized_start=717,
+  serialized_end=811,
 )
 _sym_db.RegisterEnumDescriptor(_SEG6LOCALACTION)
 
 Seg6LocalAction = enum_type_wrapper.EnumTypeWrapper(_SEG6LOCALACTION)
-SEG6 = 0
-SEG6LOCAL = 1
+UNKNOWN = 0
+SEG6 = 1
+SEG6LOCAL = 2
 INLINE = 0
 ENCAP = 1
 L2ENCAP = 2
@@ -582,8 +588,8 @@ _SEG6SERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=801,
-  serialized_end=936,
+  serialized_start=814,
+  serialized_end=949,
   methods=[
   _descriptor.MethodDescriptor(
     name='AddRoute',

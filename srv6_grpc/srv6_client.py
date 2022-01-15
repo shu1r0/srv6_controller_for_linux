@@ -82,6 +82,9 @@ class SRv6Client:
             if type and type == "seg6":
                 seg6_encap = Seg6Encap()
                 seg6_encap.type = Seg6Type.SEG6
+                
+                if encap.pop("mode", None) == "encap":
+                    seg6_encap.mode = Seg6Mode.ENCAP
                 segments = encap.pop("segments", [])
                 for segment in segments:
                     seg6_encap.segments.append(segment)
@@ -92,7 +95,8 @@ class SRv6Client:
                 action = encap.pop("action", "")
                 action = '_'.join(action.split(".")).upper()
                 seg6local_encap.action = Seg6LocalAction.Value(action)
-                nh6 = encap.pop("nh6", None)
+                nh6 = e
+                ncap.pop("nh6", None)
                 if nh6:
                     seg6local_encap.nh6 = nh6
                 nh4 = encap.pop("nh4", None)

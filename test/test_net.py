@@ -1,5 +1,8 @@
 # coding: utf-8
 
+# python3 srv6_controller.py --config test/test1.yaml
+
+
 from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.node import RemoteController
@@ -43,3 +46,4 @@ def setup():
 if __name__ == '__main__':
     setLogLevel('info')
     setup()
+
