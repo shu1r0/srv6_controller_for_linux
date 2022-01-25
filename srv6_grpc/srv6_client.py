@@ -35,6 +35,7 @@ class SRv6Client:
         self.stub = srv6_route_pb2_grpc.Seg6ServiceStub(self.channel)
 
     def close_channel(self):
+        """close channel"""
         if self.channel:
             self.channel.close()
 
@@ -47,7 +48,7 @@ class SRv6Client:
         if not self.has_established_channel():
             raise NoChannelException
         route_req = self._params_2_route_req(destination, gateway, dev, metric, table, encap)
-        print(route_req)
+        self.logger.debug("add route (req={})".format(route_req))
         reply = self.stub.AddRoute(route_req)
         if reply.status != 0:
             raise ChangeRouteException
@@ -58,6 +59,7 @@ class SRv6Client:
         if not self.has_established_channel():
             raise NoChannelException
         route_req = self._params_2_route_req(destination, gateway, dev, metric, table, encap)
+        self.logger.debug("remove route (req={})".format(route_req))
         reply = self.stub.RemoveRoute(route_req)
         if reply.status != 0:
             raise ChangeRouteException
@@ -82,7 +84,6 @@ class SRv6Client:
             if type and type == "seg6":
                 seg6_encap = Seg6Encap()
                 seg6_encap.type = Seg6Type.SEG6
-                
                 if encap.pop("mode", None) == "encap":
                     seg6_encap.mode = Seg6Mode.ENCAP
                 segments = encap.pop("segments", [])
@@ -95,12 +96,11 @@ class SRv6Client:
                 action = encap.pop("action", "")
                 action = '_'.join(action.split(".")).upper()
                 seg6local_encap.action = Seg6LocalAction.Value(action)
-                nh6 = e
-                ncap.pop("nh6", None)
+                nh6 = encap.pop("nh6", None)
                 if nh6:
                     seg6local_encap.nh6 = nh6
                 nh4 = encap.pop("nh4", None)
-                if nh6:
+                if nh4:
                     seg6local_encap.nh4 = nh4
                 srh = encap.pop("srh", None)
                 if srh:

@@ -161,6 +161,7 @@ class SRv6Controller(SRv6ControllerBase):
                         decap = {
                             'type': 'seg6local',
                             'action': route.pop('action', None),
+                            'nh4': route.pop('nh4', None),
                             'nh6': route.pop('nh6', None),
                             'srh': route.pop('srh', None)
                         }

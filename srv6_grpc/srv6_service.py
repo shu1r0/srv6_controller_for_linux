@@ -57,18 +57,18 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
             params["gateway"] = route_req.gateway
         links = self.ip.link_lookup(ifname=route_req.dev) if route_req.dev else []
         if len(links) > 0:
-            params["idx"] = links[0]
+            params["oif"] = links[0]
         if route_req.metric:
             params["metric"] = route_req.metric
         if route_req.table:
             params["table"] = route_req.table
-        if route_req.seg6_encap:
+        if route_req.WhichOneof("encap") == "seg6_encap":
             encap_params = {}
             encap_params["type"] = Seg6Type.Name(route_req.seg6_encap.type).lower()
             encap_params["mode"] = Seg6Mode.Name(route_req.seg6_encap.mode).lower()
             encap_params["segs"] = route_req.seg6_encap.segments
             params["encap"] = encap_params
-        if route_req.seg6local_encap:
+        if route_req.WhichOneof("encap") == "seg6local_encap":
             encap_params = {}
             encap_params["type"] = Seg6Type.Name(route_req.seg6_encap.type).lower()
             encap_params["action"] = Seg6LocalAction2string[route_req.seg6local_encap.action]
@@ -86,7 +86,7 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
             params["encap"] = encap_params
         return params
 
-    def _add_route(self, dst, params):
+    def _add_route(self, dst, **params):
         """add seg6 route
 
         https://github.com/svinota/pyroute2/blob/5ce9ccae0e47e02873f8d12d9e18ed4734e805fc/pyroute2.core/pr2modules/iproute/linux.py#L1787
@@ -97,9 +97,14 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
             encap_mode (str) : seg6 encap mode (e.g. 'encap')
             encap_segs (list[str]) : segments
         """
-        self.ip.route('add', **params)
+        self.logger.debug("add route dst={}, {}".format(dst, params))
+        try:        
+            self.ip.route('add', dst=dst, **params)
+        except Exception as e:
+            self.logger.error(e)
+            raise e
 
-    def _del_route(self, dst, params):
+    def _del_route(self, dst, **params):
         """delete seg6 route
 
         https://github.com/svinota/pyroute2/blob/5ce9ccae0e47e02873f8d12d9e18ed4734e805fc/pyroute2.core/pr2modules/iproute/linux.py#L1787
@@ -110,5 +115,10 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
             encap_mode (str) : seg6 encap mode (e.g. 'encap')
             encap_segs (list[str]) : segments (e.g. ['2000::5', '2000::6'])
         """
-        self.ip.route('del', **params)
+        self.logger.debug("delete route dst={}, {}".format(dst, params))
+        try:
+            self.ip.route('del', dst=dst, **params)
+        except Exception as e:
+            self.logger.error(e)
+            raise e
 

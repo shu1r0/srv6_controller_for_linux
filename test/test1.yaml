@@ -1,7 +1,7 @@
 
 nodes:
   - name: r1
-    ip: 127.0.0.1
+    ip: 192.168.11.1
     port: 30000
     encap:
       - destination: 192.168.1.0/24
@@ -13,9 +13,9 @@ nodes:
         action: End.DX4
         nh4: "192.168.0.1"
         dev: r1_h1
-  - name: r2
-    ip: 127.0.0.1
-    port: 30001
+  - name: r2C
+    ip: 192.168.22.1
+    port: 30000
     encap:
       - destination: 192.168.0.0/24
         mode: encap
