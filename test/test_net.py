@@ -31,18 +31,31 @@ def setup():
 
     net.start()
 
+    # r1 address config
+    r1.cmd("sysctl -w net.ipv6.conf.all.forwarding=1")
+    r1.cmd("sysctl -w net.ipv6.conf.all.seg6_enabled=1")
+    r1.cmd("sysctl -w net.ipv6.conf.all.seg6_require_hmac=0")
     r1.cmd("ip -6 addr add a::1/64 dev r1_r2")
     r1.cmd("ip addr add 192.168.0.254/24 dev r1_h1")
     r1.cmd("ip addr add 192.168.11.1/24 dev r1_c1")
-    r1.cmd("cd ..; python3 srv6_agent.py --ip 0.0.0.0 --port 30000 -v &")
+    r1.cmd("cd ..; python3 srv6_agent.py -v --ip 0.0.0.0 --port 30000 --log_file test1_r1.log &")
 
+    # r2 address config
+    r2.cmd("sysctl -w net.ipv6.conf.all.forwarding=1")
+    r2.cmd("sysctl -w net.ipv6.conf.all.seg6_enabled=1")
+    r2.cmd("sysctl -w net.ipv6.conf.all.seg6_require_hmac=0")
     r2.cmd("ip -6 addr add a::2/64 dev r2_r1")
     r2.cmd("ip addr add 192.168.1.254/24 dev r2_h2")
     r2.cmd("ip addr add 192.168.22.1/24 dev r2_c1")
-    r1.cmd("cd ..; python3 srv6_agent.py --ip 0.0.0.0 --port 30000 -v &")
+    r2.cmd("cd ..; python3 srv6_agent.py -v --ip 0.0.0.0 --port 30000 --log_file test1_r2.log &")
 
+    # c1 address config
     c1.cmd("ip addr add 192.168.11.2/24 dev c1_r1")
-    c1.cmd("ip addr add 192.168.22.2/24 dev c1_r1")
+    c1.cmd("ip addr add 192.168.22.2/24 dev c1_r2")
+
+    # host address config
+    h1.cmd("ip route add default via 192.168.0.254")
+    h2.cmd("ip route add default via 192.168.1.254")
 
     CLI(net)
     net.stop()

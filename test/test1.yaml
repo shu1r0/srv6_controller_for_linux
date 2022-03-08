@@ -1,7 +1,9 @@
 
 nodes:
   - name: r1
+    # agent listening address
     ip: 192.168.11.1
+    # agent listening port
     port: 30000
     encap:
       - destination: 192.168.1.0/24
@@ -13,7 +15,7 @@ nodes:
         action: End.DX4
         nh4: "192.168.0.1"
         dev: r1_h1
-  - name: r2C
+  - name: r2
     ip: 192.168.22.1
     port: 30000
     encap:
