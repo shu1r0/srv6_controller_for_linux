@@ -7,9 +7,8 @@ syntax = 'proto3';
  */
 enum Seg6Type {
   UNKNOWN = 0;
-  /// encapsulation type IPv6 Segment
+  
   SEG6 = 1;
-  // local SRv6 segment processing
   SEG6LOCAL = 2;
 }
 
@@ -17,11 +16,8 @@ enum Seg6Type {
  * segment routing mode
  */
 enum Seg6Mode {
-  // Directly insert Segment Routing Header after IPv6 header
   INLINE = 0;
-  // Encapsulation packet in an outer IPv6 header with SRH
   ENCAP = 1;
-  // Encapsulate ingress L2 frame within an outer IPv6 header and IPv6
   L2ENCAP = 2;
 }
 
@@ -29,16 +25,11 @@ enum Seg6Mode {
  * Seg6 local action
  */
 enum Seg6LocalAction{
-  // Regular SRv6 processing as intermediate segment endpoint.
   END = 0;
-  // Regular SRv6 processing as intermediate segment  endpoint.
-  // Additionally, forward processed packets to given next-hop.
-  // This action only accepts packets with a nonzero Segments Left value.
-  // Other matching packets are dropped.
+  
   END_X = 1;
   END_DX4 = 2;
-  // Decapsulate inner IPv6 packet and forward it to the specified next-hop.
-  // If the argument is set to ::, then the next-hop is selection according to the local selection rules.
+  
   END_DX6 = 3;
   END_B6 = 4;
   END_B6_ENCAPS = 5;
