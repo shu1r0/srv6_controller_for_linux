@@ -1,0 +1,38 @@
+nodes:
+  - name: r1
+    # agent listening address
+    ip: 192.168.11.1
+    # agent listening port
+    port: 30000
+    route:
+#      - destination: fc00:d::/64
+#        gateway: fc00:b::2
+      - destination: fc00:e::/64
+        gateway: fc00:b::2
+    encap:
+      - destination: fc00:d::/64
+        mode: encap
+        segments: [ fc00:e::2 ]
+        dev: r1_r2
+  - name: r2
+    ip: 192.168.22.1
+    port: 30000
+    route:
+      - destination: fc00:d::/64
+        gateway: fc00:c::2
+      - destination: fc00:a::/64
+        gateway: fc00:b::1
+  - name: r3
+    ip: 192.168.33.1
+    port: 30000
+    route:
+      - destination: fc00:a::/64
+        gateway: fc00:c::1
+  - name: r4
+    ip: 192.168.44.1
+    port: 30000
+    route:
+      - destination: fc00:d::/64
+        gateway: fc00:e::1
+      - destination: fc00:a::/64
+        gateway: fc00:e::1

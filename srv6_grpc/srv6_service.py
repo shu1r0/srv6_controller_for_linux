@@ -63,20 +63,22 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         if route_req.table:
             params["table"] = route_req.table
         if route_req.WhichOneof("encap") == "seg6_encap":
-            encap_params = {}
-            encap_params["type"] = Seg6Type.Name(route_req.seg6_encap.type).lower()
-            encap_params["mode"] = Seg6Mode.Name(route_req.seg6_encap.mode).lower()
-            encap_params["segs"] = route_req.seg6_encap.segments
+            encap_params = {
+                "type": Seg6Type.Name(route_req.seg6_encap.type).lower(),
+                "mode": Seg6Mode.Name(route_req.seg6_encap.mode).lower(),
+                "segs": route_req.seg6_encap.segments
+            }
             params["encap"] = encap_params
         if route_req.WhichOneof("encap") == "seg6local_encap":
-            encap_params = {}
-            encap_params["type"] = Seg6Type.Name(route_req.seg6_encap.type).lower()
-            encap_params["action"] = Seg6LocalAction2string[route_req.seg6local_encap.action]
-            if route_req.seg6local_encap.nh6:
+            encap_params = {
+                "type": Seg6Type.Name(route_req.seg6local_encap.type).lower(),
+                "action": Seg6LocalAction2string[route_req.seg6local_encap.action]
+            }
+            if route_req.seg6local_encap.WhichOneof("param") == "nh6":
                 encap_params["nh6"] = route_req.seg6local_encap.nh6
-            if route_req.seg6local_encap.nh4:
+            if route_req.seg6local_encap.WhichOneof("param") == "nh4":
                 encap_params["nh4"] = route_req.seg6local_encap.nh4
-            if route_req.seg6local_encap.srh:
+            if route_req.seg6local_encap.WhichOneof("param") == "srh":
                 srh_params = {
                     "segs": route_req.seg6local_encap.srh.segments
                 }

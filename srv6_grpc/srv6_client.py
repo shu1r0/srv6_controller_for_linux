@@ -110,5 +110,5 @@ class SRv6Client:
                     hmac = srh.pop("hmac", None)
                     if hmac:
                         seg6local_encap.srh.hmac = hmac
-                route_req.seg6_encap.CopyFrom(seg6local_encap)
+                route_req.seg6local_encap.CopyFrom(seg6local_encap)
         return route_req

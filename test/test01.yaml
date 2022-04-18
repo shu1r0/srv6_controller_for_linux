@@ -1,0 +1,21 @@
+nodes:
+  - name: R1
+    ip: 192.168.101.1
+    port: 30000
+    encap:
+      - destination: "fc00:2::/64"
+        mode: inline
+        segments: ["fc00:aa::2", "fc00:d::2", "fc00:a::2"]
+        dev: r1_r2
+      - destination: "fc00:3::/64"
+        mode: inline
+        segments: ["fc00:ab::2", "fc00:e::2", "fc00:b::2"]
+        dev: r1_r2
+  # - name: R6
+  #   ip: 192.168.106.1
+  #   port: 30000
+  #   encap:
+  #     - destination: "fc00:1::/64"
+  #       mode: inline
+  #       segments: ["fc00:b::1", "fc00:e::1", "fc00:ab::1"]
+  #       dev: r6_r5
