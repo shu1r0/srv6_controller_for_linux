@@ -9,7 +9,7 @@ nodes:
 #        gateway: fc00:b::2
       - destination: "fc00:e::/64"
         gateway: "fc00:b::2"
-    encap:
+    headend:
       - destination: "fc00:d::/64"
         mode: encap
         segments: [ "fc00:e::2" ]

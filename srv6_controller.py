@@ -2,7 +2,6 @@ from logging import INFO, DEBUG, getLogger
 import argparse
 import yaml
 import time
-import threading
 
 from srv6_grpc.srv6_client import SRv6Client
 from utils.log import get_stream_handler, get_file_handler
@@ -108,9 +107,6 @@ class SRv6ControllerBase:
 
     def start(self):
         pass
-        # read yml
-        # connect
-        # add route from config
 
     def stop(self):
         self.close_all()
@@ -121,67 +117,70 @@ class SRv6Controller(SRv6ControllerBase):
 
     def __init__(self, yml_file=None, logger=None):
         super(SRv6Controller, self).__init__(logger=logger)
-        self._yml_file = yml_file
         self._route_conf: list = []
-        if self._yml_file:
-            self._read_yml()
+        if yml_file is not None:
+            self.read_yml(yml_file)
 
         self.logger = logger if logger else getLogger(__name__)
 
-    def _read_yml(self, yml_file=None):
-        if yml_file is None:
-            yml_file = self._yml_file
-            with open(yml_file) as f:
-                dct = yaml.safe_load(f)
-                nodes = dct.get('nodes')
-                for node in nodes:
-                    name = node.get('name')
-                    ip = node.get('ip')
-                    port = node.get('port')
-                    routes = node.get('route', [])
-                    encap_routes = node.get('encap', [])
-                    decap_routes = node.get('decap', [])
+    def read_yml(self, yml_file):
+        with open(yml_file) as f:
+            dct = yaml.safe_load(f)
+            nodes = dct.get('nodes')
+            for node in nodes:
+                name = node.get('name')
+                ip = node.get('ip', "127.0.0.1")
+                port = node.get('port')
+                # get routes
+                routes = node.get('route', [])
+                # get headend behavior
+                headend_routes = node.get('headend', [])
+                # get end behavior
+                end_routes = node.get('end', [])
 
-                    self.add_node(name, ip, port)
+                self.add_node(name, ip, port)
 
-                    for route in routes:
-                        route['name'] = name
-                        self._route_conf.append(route)
-                    for route in encap_routes:
-                        route['name'] = name
-                        encap = {
-                            'type': 'seg6',
-                            'mode': route.pop('mode', None),
-                            'segments': route.pop('segments', None)
+                for route in routes:
+                    route['name'] = name
+                    self._route_conf.append(route)
+                # headend behavior
+                for route in headend_routes:
+                    route['name'] = name
+                    headend = {
+                        'type': 'seg6',
+                        'mode': route.pop('mode', None),
+                        'segments': route.pop('segments', None)
+                    }
+                    # ip command's encap route
+                    route['encap'] = headend
+                    self._route_conf.append(route)
+                # end behavior
+                for route in end_routes:
+                    route['name'] = name
+                    end = {
+                        'type': 'seg6local',
+                        'action': route.pop('action', None),
+                        'nh4': route.pop('nh4', None),
+                        'nh6': route.pop('nh6', None),
+                        'srh': route.pop('srh', None)
+                    }
+                    if end.get('srh'):
+                        end['srh'] = {
+                            'segments': end['srh'].get('segment'),
+                            'hmac': end['srh'].get('hmac')
                         }
-                        route['encap'] = encap
-                        self._route_conf.append(route)
-                    for route in decap_routes:
-                        route['name'] = name
-                        decap = {
-                            'type': 'seg6local',
-                            'action': route.pop('action', None),
-                            'nh4': route.pop('nh4', None),
-                            'nh6': route.pop('nh6', None),
-                            'srh': route.pop('srh', None)
-                        }
-                        if decap.get('srh'):
-                            decap['srh'] = {
-                                'segments': decap['srh'].get('segment'),
-                                'hmac': decap['srh'].get('hmac')
-                            }
-                        route['encap'] = decap
-                        self._route_conf.append(route)
+                    # ip encap route
+                    route['encap'] = end
+                    self._route_conf.append(route)
+
+    def add_routes(self):
+        for route in self._route_conf:
+            self.add_route(**route)
 
     def start(self):
         self.logger.info("start controller (nodes = {})".format(self.nodes))
         self.connect_all()
-        time.sleep(1)
-        for route in self._route_conf:
-            self.add_route(**route)
-
-    def stop(self):
-        pass
+        self.add_routes()
 
 
 def get_args():

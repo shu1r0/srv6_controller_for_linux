@@ -2,7 +2,7 @@ nodes:
   - name: R1
     ip: 192.168.101.1
     port: 30000
-    encap:
+    headend:
       - destination: "fc00:2::/64"
         mode: inline
         segments: ["fc00:aa::2", "fc00:d::2", "fc00:a::2"]
@@ -14,7 +14,7 @@ nodes:
   # - name: R6
   #   ip: 192.168.106.1
   #   port: 30000
-  #   encap:
+  #   headend:
   #     - destination: "fc00:1::/64"
   #       mode: inline
   #       segments: ["fc00:b::1", "fc00:e::1", "fc00:ab::1"]
