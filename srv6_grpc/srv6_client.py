@@ -28,6 +28,7 @@ class SRv6Client:
         self.channel = None
         self.stub = None
         self.logger = logger
+        self._added_route_req = []
 
     def establish_channel(self):
         """establish grpc channel"""
@@ -50,6 +51,7 @@ class SRv6Client:
         route_req = self._params_2_route_req(destination, gateway, dev, metric, table, encap)
         self.logger.debug("add route (req={})".format(route_req))
         reply = self.stub.AddRoute(route_req)
+        self._added_route_req.append(route_req)
         if reply.status != 0:
             raise ChangeRouteException
         return self
@@ -64,6 +66,10 @@ class SRv6Client:
         if reply.status != 0:
             raise ChangeRouteException
         return self
+
+    def reset_route(self):
+        for req in self._added_route_req:
+            self.stub.RemoveRoute(req)
 
     def show_routes6(self):
         raise NotImplementedError
@@ -84,8 +90,11 @@ class SRv6Client:
             if type and type == "seg6":
                 seg6_encap = Seg6Encap()
                 seg6_encap.type = Seg6Type.SEG6
-                if encap.pop("mode", None) == "encap":
+                mode = encap.pop("mode", None)
+                if mode == "encap":
                     seg6_encap.mode = Seg6Mode.ENCAP
+                elif mode == "l2encap":
+                    seg6_encap.mode = Seg6Mode.L2ENCAP
                 segments = encap.pop("segments", [])
                 for segment in segments:
                     seg6_encap.segments.append(segment)
@@ -93,15 +102,19 @@ class SRv6Client:
             elif type and type == "seg6local":
                 seg6local_encap = Seg6LocalEncap()
                 seg6local_encap.type = Seg6Type.SEG6LOCAL
+                # action convert (e.g. End.DX4 => END_DX4)
                 action = encap.pop("action", "")
                 action = '_'.join(action.split(".")).upper()
                 seg6local_encap.action = Seg6LocalAction.Value(action)
+                # next hop ipv6
                 nh6 = encap.pop("nh6", None)
                 if nh6:
                     seg6local_encap.nh6 = nh6
+                # next hop ipv4
                 nh4 = encap.pop("nh4", None)
                 if nh4:
                     seg6local_encap.nh4 = nh4
+                # segment routing header
                 srh = encap.pop("srh", None)
                 if srh:
                     segments = srh.pop("segments", [])
@@ -110,5 +123,12 @@ class SRv6Client:
                     hmac = srh.pop("hmac", None)
                     if hmac:
                         seg6local_encap.srh.hmac = hmac
+                # out interface
+                oif = encap.pop("oif", None)
+                if oif:
+                    seg6local_encap.oif = oif
+                table = encap.pop("table", None)
+                if table:
+                    seg6local_encap.table = table
                 route_req.seg6local_encap.CopyFrom(seg6local_encap)
         return route_req

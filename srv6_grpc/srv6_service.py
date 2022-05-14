@@ -7,10 +7,20 @@ import srv6_route_pb2_grpc
 Seg6LocalAction2string = {
     Seg6LocalAction.END: "End",
     Seg6LocalAction.END_X: "End.X",
-    Seg6LocalAction.END_DX4: "End.DX4",
+    Seg6LocalAction.END_T: "End.T",
+    Seg6LocalAction.END_DX2: "End.DX2",
     Seg6LocalAction.END_DX6: "End.DX6",
+    Seg6LocalAction.END_DX4: "End.DX4",
+    Seg6LocalAction.END_DT6: "End.DT6",
+    Seg6LocalAction.END_DT4: "End.DT4",
     Seg6LocalAction.END_B6: "End.B6",
-    Seg6LocalAction.END_B6_ENCAPS: "End.B6.Encap"
+    Seg6LocalAction.END_B6_ENCAP: "End.B6.ENCAP",
+    Seg6LocalAction.END_BM: "End.BM",
+    Seg6LocalAction.END_S: "End.S",
+    Seg6LocalAction.END_AS: "End.AS",
+    Seg6LocalAction.END_AM: "End.AM",
+    Seg6LocalAction.END_BPF: "End.BPF",
+    Seg6LocalAction.END_DT46: "End.DT46",
 }
 
 
@@ -18,50 +28,58 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
     """gRPC SRv6 Service
 
     Attributes:
-        ip (IPRoute) : netlink socket
+        ipr (IPRoute) : netlink socket
         logger (Logger) : logger
     """
 
     def __init__(self, logger):
         # get access to the netlink socket
-        self.ip = IPRoute()
+        self.ipr = IPRoute()
         self.logger = logger
 
     def AddRoute(self, request, context):
         self.logger.debug("AddRoute called by peer({})".format(context.peer()))
         params = self._route_req_2_params(request)
-        if params:
+        try:
             self._add_route(**params)
             return RouteReply(status=0)
-        else:
+        except Exception:
             return RouteReply(status=-1)
 
     def RemoveRoute(self, request, context):
         self.logger.debug("RemoveRoute called by peer({})".format(context.peer()))
         params = self._route_req_2_params(request)
-        if params:
+        try:
             self._del_route(**params)
             return RouteReply(status=0)
-        else:
+        except Exception:
             return RouteReply(status=-1)
 
     def ShowRoute(self, request, context):
         self.logger.debug("ShowRoute called by peer({})".format(context.peer()))
-        routes = self.ip.get_routes()
+        routes = self.ipr.get_routes()
         raise NotImplementedError
 
     def _route_req_2_params(self, route_req: Route):
-        params = {}
-        params["dst"] = route_req.destination
+        # route parameter
+        params = {
+            "dst": route_req.destination
+        }
+        # gateway
         if route_req.gateway:
             params["gateway"] = route_req.gateway
-        links = self.ip.link_lookup(ifname=route_req.dev) if route_req.dev else []
+        # get link
+        links = self.ipr.link_lookup(ifname=route_req.dev) if route_req.dev else []
         if len(links) > 0:
             params["oif"] = links[0]
+
+        # metric and table
         if route_req.metric:
             params["metric"] = route_req.metric
         if route_req.table:
             params["table"] = route_req.table
+
+        # encap parameter
         if route_req.WhichOneof("encap") == "seg6_encap":
             encap_params = {
                 "type": Seg6Type.Name(route_req.seg6_encap.type).lower(),
@@ -74,6 +92,7 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
                 "type": Seg6Type.Name(route_req.seg6local_encap.type).lower(),
                 "action": Seg6LocalAction2string[route_req.seg6local_encap.action]
             }
+            # parameters
             if route_req.seg6local_encap.WhichOneof("param") == "nh6":
                 encap_params["nh6"] = route_req.seg6local_encap.nh6
             if route_req.seg6local_encap.WhichOneof("param") == "nh4":
@@ -85,7 +104,14 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
                 if route_req.seg6local_encap.srh.hmac:
                     srh_params["hmac"] = route_req.seg6local_encap.srh.hmac
                 encap_params["srh"] = srh_params
+            if route_req.seg6local_encap.WhichOneof("param") == "oif":
+                links = self.ipr.link_lookup(ifname=route_req.seg6local_encap.oif) if route_req.seg6local_encap.oif else []
+                if len(links) > 0:
+                    encap_params["oif"] = links[0]
+            if route_req.seg6local_encap.WhichOneof("param") == "table":
+                encap_params["vrf_table"] = route_req.seg6local_encap.table
             params["encap"] = encap_params
+
         return params
 
     def _add_route(self, dst, **params):
@@ -101,7 +127,7 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         """
         self.logger.debug("add route dst={}, {}".format(dst, params))
         try:        
-            self.ip.route('add', dst=dst, **params)
+            self.ipr.route('add', dst=dst, **params)
         except Exception as e:
             self.logger.error(e)
             raise e
@@ -119,8 +145,25 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         """
         self.logger.debug("delete route dst={}, {}".format(dst, params))
         try:
-            self.ip.route('del', dst=dst, **params)
+            self.ipr.route('del', dst=dst, **params)
         except Exception as e:
             self.logger.error(e)
             raise e
+    
+    def _get_routes(self, **params):
+        """get route
+
+        https://github.com/svinota/pyroute2/blob/4e9e7d50596e6375ff0d19aaf572dd3c8f53c2db/pyroute2.core/pr2modules/iproute/linux.py#L395
+        https://github.com/svinota/pyroute2/blob/4e9e7d50596e6375ff0d19aaf572dd3c8f53c2db/pyroute2.core/pr2modules/iproute/linux.py#L1705
+
+        Notes:
+            ipr.get_routes() is a hack. The detail is https://docs.pyroute2.org/iproute.html#pyroute2.iproute.linux.RTNL_API.get_routes
+
+        Args:
+            **params:
+
+        Returns:
+            Routes
+        """
+        routes = self.ipr.get_routes()
 

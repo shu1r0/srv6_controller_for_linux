@@ -7,7 +7,7 @@ syntax = 'proto3';
  */
 enum Seg6Type {
   UNKNOWN = 0;
-  
+
   SEG6 = 1;
   SEG6LOCAL = 2;
 }
@@ -24,15 +24,25 @@ enum Seg6Mode {
 /**
  * Seg6 local action
  */
-enum Seg6LocalAction{
-  END = 0;
-  
-  END_X = 1;
-  END_DX4 = 2;
-  
-  END_DX6 = 3;
-  END_B6 = 4;
-  END_B6_ENCAPS = 5;
+enum Seg6LocalAction {
+  NOACTION = 0;
+
+  END  = 1;
+  END_X  = 2;
+  END_T  = 3;
+  END_DX2 = 4;
+  END_DX6 = 5;
+  END_DX4 = 6;
+  END_DT6 = 7;
+  END_DT4 = 8;
+  END_B6 = 9;
+  END_B6_ENCAP = 10;
+  END_BM = 11;
+  END_S  = 12;
+  END_AS = 13;
+  END_AM = 14;
+  END_BPF = 15;
+  END_DT46 = 16;
 }
 
 /**
@@ -73,6 +83,8 @@ message Seg6LocalEncap {
     string nh6 = 10;  // next hop
     string nh4 = 11;
     Srh srh = 12;
+    string oif = 13;  // out interface
+    uint32 table = 14;  // table
   }
 
   message Srh {

@@ -1,7 +1,7 @@
+from cmd import Cmd
 from logging import INFO, DEBUG, getLogger
 import argparse
 import yaml
-import time
 
 from srv6_grpc.srv6_client import SRv6Client
 from utils.log import get_stream_handler, get_file_handler
@@ -126,10 +126,11 @@ class SRv6Controller(SRv6ControllerBase):
     def read_yml(self, yml_file):
         with open(yml_file) as f:
             dct = yaml.safe_load(f)
+            # nodes
             nodes = dct.get('nodes')
             for node in nodes:
                 name = node.get('name')
-                ip = node.get('ip', "127.0.0.1")
+                ip = node.get('ip')
                 port = node.get('port')
                 # get routes
                 routes = node.get('route', [])
@@ -162,7 +163,9 @@ class SRv6Controller(SRv6ControllerBase):
                         'action': route.pop('action', None),
                         'nh4': route.pop('nh4', None),
                         'nh6': route.pop('nh6', None),
-                        'srh': route.pop('srh', None)
+                        'srh': route.pop('srh', None),
+                        'oif': route.pop('oif', None),
+                        'table': route.pop('table', None)
                     }
                     if end.get('srh'):
                         end['srh'] = {
