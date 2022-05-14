@@ -1,1 +1,0 @@
-{"virtualbox":{"/home/vagrant/share":{"guestpath":"/home/vagrant/share","hostpath":"/mnt/c/Users/shima/workspace/srv6_controller_for_linux","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/mnt/c/Users/shima/workspace/srv6_controller_for_linux","disabled":false,"__vagrantfile":true}}}
