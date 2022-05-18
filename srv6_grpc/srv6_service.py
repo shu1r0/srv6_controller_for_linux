@@ -150,7 +150,7 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
             self.logger.error(e)
             raise e
     
-    def _get_routes(self, **params):
+    def _get_routes(self):
         """get route
 
         https://github.com/svinota/pyroute2/blob/4e9e7d50596e6375ff0d19aaf572dd3c8f53c2db/pyroute2.core/pr2modules/iproute/linux.py#L395
@@ -159,11 +159,9 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         Notes:
             ipr.get_routes() is a hack. The detail is https://docs.pyroute2.org/iproute.html#pyroute2.iproute.linux.RTNL_API.get_routes
 
-        Args:
-            **params:
-
         Returns:
             Routes
         """
         routes = self.ipr.get_routes()
+        return routes
 

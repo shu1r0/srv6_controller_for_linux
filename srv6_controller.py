@@ -56,7 +56,7 @@ class SRv6Controller:
             SRv6Node
         """
         node = SRv6Node(name, ip, port, logger=self.logger)
-        if node in self.nodes:
+        if node not in self.nodes:
             self.nodes.append(node)
         return node
 
@@ -75,7 +75,7 @@ class SRv6Controller:
             for n in self.nodes:
                 if node == n.name:
                     return n
-        raise KeyError
+        raise KeyError("{} SRv6 node not found".format(node))
 
     def connect(self, name):
         """connect to node

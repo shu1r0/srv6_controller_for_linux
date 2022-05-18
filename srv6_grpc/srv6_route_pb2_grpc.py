@@ -26,10 +26,10 @@ class Seg6ServiceStub(object):
                 request_serializer=srv6__route__pb2.Route.SerializeToString,
                 response_deserializer=srv6__route__pb2.RouteReply.FromString,
                 )
-        self.ShowRoute = channel.unary_unary(
-                '/Seg6Service/ShowRoute',
-                request_serializer=srv6__route__pb2.ShowRoutes6Request.SerializeToString,
-                response_deserializer=srv6__route__pb2.ShowRoutes6Reply.FromString,
+        self.GetRoutes = channel.unary_unary(
+                '/Seg6Service/GetRoutes',
+                request_serializer=srv6__route__pb2.GetRoutesRequest.SerializeToString,
+                response_deserializer=srv6__route__pb2.GetRoutesReply.FromString,
                 )
 
 
@@ -50,7 +50,7 @@ class Seg6ServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ShowRoute(self, request, context):
+    def GetRoutes(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -69,10 +69,10 @@ def add_Seg6ServiceServicer_to_server(servicer, server):
                     request_deserializer=srv6__route__pb2.Route.FromString,
                     response_serializer=srv6__route__pb2.RouteReply.SerializeToString,
             ),
-            'ShowRoute': grpc.unary_unary_rpc_method_handler(
-                    servicer.ShowRoute,
-                    request_deserializer=srv6__route__pb2.ShowRoutes6Request.FromString,
-                    response_serializer=srv6__route__pb2.ShowRoutes6Reply.SerializeToString,
+            'GetRoutes': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRoutes,
+                    request_deserializer=srv6__route__pb2.GetRoutesRequest.FromString,
+                    response_serializer=srv6__route__pb2.GetRoutesReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -121,7 +121,7 @@ class Seg6Service(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def ShowRoute(request,
+    def GetRoutes(request,
             target,
             options=(),
             channel_credentials=None,
@@ -131,8 +131,8 @@ class Seg6Service(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Seg6Service/ShowRoute',
-            srv6__route__pb2.ShowRoutes6Request.SerializeToString,
-            srv6__route__pb2.ShowRoutes6Reply.FromString,
+        return grpc.experimental.unary_unary(request, target, '/Seg6Service/GetRoutes',
+            srv6__route__pb2.GetRoutesRequest.SerializeToString,
+            srv6__route__pb2.GetRoutesReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
