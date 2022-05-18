@@ -100,11 +100,11 @@ message RouteReply {
   uint32 status = 1;
 }
 
-message ShowRoutes6Request {
+message GetRoutesRequest {
   // Not implemented
 }
 
-message ShowRoutes6Reply {
+message GetRoutesReply {
   // Not implemented
 }
 
@@ -114,5 +114,5 @@ message ShowRoutes6Reply {
 service Seg6Service {
   rpc AddRoute(Route) returns (RouteReply);
   rpc RemoveRoute(Route) returns (RouteReply);
-  rpc ShowRoute(ShowRoutes6Request) returns (ShowRoutes6Reply);
+  rpc GetRoutes(GetRoutesRequest) returns (GetRoutesReply);
 }

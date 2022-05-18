@@ -55,8 +55,8 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         except Exception:
             return RouteReply(status=-1)
 
-    def ShowRoute(self, request, context):
-        self.logger.debug("ShowRoute called by peer({})".format(context.peer()))
+    def GetRoutes(self, request, context):
+        self.logger.debug("GetRoutes called by peer({})".format(context.peer()))
         routes = self.ipr.get_routes()
         raise NotImplementedError
 

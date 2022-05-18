@@ -28,7 +28,6 @@ class SRv6Client:
         self.channel = None
         self.stub = None
         self.logger = logger
-        self._added_route_req = []
 
     def establish_channel(self):
         """establish grpc channel"""
@@ -51,10 +50,9 @@ class SRv6Client:
         route_req = self._params_2_route_req(destination, gateway, dev, metric, table, encap)
         self.logger.debug("add route (req={})".format(route_req))
         reply = self.stub.AddRoute(route_req)
-        self._added_route_req.append(route_req)
         if reply.status != 0:
             raise ChangeRouteException
-        return self
+        return route_req
 
     def remove_route(self, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
         """remove srv6 route"""
@@ -65,13 +63,9 @@ class SRv6Client:
         reply = self.stub.RemoveRoute(route_req)
         if reply.status != 0:
             raise ChangeRouteException
-        return self
+        return route_req
 
-    def reset_route(self):
-        for req in self._added_route_req:
-            self.stub.RemoveRoute(req)
-
-    def show_routes6(self):
+    def get_routes(self):
         raise NotImplementedError
 
     def _params_2_route_req(self, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
