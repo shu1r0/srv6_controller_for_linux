@@ -49,7 +49,7 @@ enum Seg6LocalAction {
  * Route Config
  */
 message Route {
-  // network or default
+  // network address or default
   string destination = 1;
   optional string gateway = 2;
   optional string dev = 3;
@@ -101,11 +101,23 @@ message RouteReply {
 }
 
 message GetRoutesRequest {
-  // Not implemented
+  // pass
+}
+
+
+message ReplyRoute {
+  uint32 family = 1;
+  uint32 tos = 2;
+  string proto = 3;
+  uint32 scope = 4;
+  uint32 type = 5;
+  uint32 flags = 6;
+
+  Route route = 7;
 }
 
 message GetRoutesReply {
-  // Not implemented
+  repeated ReplyRoute routes = 1;
 }
 
 /**

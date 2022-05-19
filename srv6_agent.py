@@ -36,7 +36,7 @@ class SRv6Agent:
     def __del__(self):
         self.stop()
 
-    def start(self):
+    def start(self, block=True):
         """start server"""
         self.logger.info("server start (ip={}, port={})".format(self.ip, self.port))
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -45,7 +45,8 @@ class SRv6Agent:
         )
         self.server.add_insecure_port(self.ip + ':' + self.port)
         self.server.start()
-        self.server.wait_for_termination()
+        if block:
+            self.server.wait_for_termination()
 
     def stop(self):
         """stop server"""

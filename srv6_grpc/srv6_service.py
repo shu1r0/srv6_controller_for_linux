@@ -117,7 +117,8 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
     def _add_route(self, dst, **params):
         """add seg6 route
 
-        https://github.com/svinota/pyroute2/blob/5ce9ccae0e47e02873f8d12d9e18ed4734e805fc/pyroute2.core/pr2modules/iproute/linux.py#L1787
+        References:
+            https://github.com/svinota/pyroute2/blob/5ce9ccae0e47e02873f8d12d9e18ed4734e805fc/pyroute2.core/pr2modules/iproute/linux.py#L1787
 
         Args:
             dst (str) : destination
@@ -135,7 +136,8 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
     def _del_route(self, dst, **params):
         """delete seg6 route
 
-        https://github.com/svinota/pyroute2/blob/5ce9ccae0e47e02873f8d12d9e18ed4734e805fc/pyroute2.core/pr2modules/iproute/linux.py#L1787
+        References:
+            https://github.com/svinota/pyroute2/blob/5ce9ccae0e47e02873f8d12d9e18ed4734e805fc/pyroute2.core/pr2modules/iproute/linux.py#L1787
 
         Args:
             dst (str) : destination
@@ -153,8 +155,9 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
     def _get_routes(self):
         """get route
 
-        https://github.com/svinota/pyroute2/blob/4e9e7d50596e6375ff0d19aaf572dd3c8f53c2db/pyroute2.core/pr2modules/iproute/linux.py#L395
-        https://github.com/svinota/pyroute2/blob/4e9e7d50596e6375ff0d19aaf572dd3c8f53c2db/pyroute2.core/pr2modules/iproute/linux.py#L1705
+        References:
+            https://github.com/svinota/pyroute2/blob/4e9e7d50596e6375ff0d19aaf572dd3c8f53c2db/pyroute2.core/pr2modules/iproute/linux.py#L395
+            https://github.com/svinota/pyroute2/blob/4e9e7d50596e6375ff0d19aaf572dd3c8f53c2db/pyroute2.core/pr2modules/iproute/linux.py#L1705
 
         Notes:
             ipr.get_routes() is a hack. The detail is https://docs.pyroute2.org/iproute.html#pyroute2.iproute.linux.RTNL_API.get_routes
@@ -165,3 +168,30 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         routes = self.ipr.get_routes()
         return routes
 
+    def _parse_routes(self, routes):
+        pass
+    
+    def _parse_route(self, route):
+        """
+
+        Args:
+            route:
+
+        Returns:
+            ReplyRoute
+
+        Todo:
+            * parse route
+        """
+        rep_route = ReplyRoute()
+        rep_route.family = route.get("family")
+        rep_route.tos = route.get("tos")
+        # convert string
+        rep_route.proto = route.get("proto")
+        rep_route.type = route.get("type")
+        rep_route.flags = route.get("flags")
+        
+        dst_len = route.get("dst_len")
+        #todo route 'attrs': [('RTA_TABLE', 255), ('RTA_DST', 'fe80::'), ('RTA_PRIORITY', 0), ('RTA_OIF', 4), ('RTA_CACHEINFO', {'rta_clntref': 0, 'rta_lastuse': 0, 'rta_expires': 0, 'rta_error': 0, 'rta_used': 0, 'rta_id': 0, 'rta_ts': 0, 'rta_tsage': 0}), ('RTA_PREF', 0)]
+        
+        return rep_route
