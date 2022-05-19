@@ -15,37 +15,28 @@ EOS
 # install basic package
 # ------------------------------------------------------------
 $install_package = <<SCRIPT
-# install package
-sudo apt-get -y update
-sudo apt-get -y upgrade
+sudo apt -y update
+sudo apt -y upgrade
 
-sudo apt install -y software-properties-common
-sudo add-apt-repository -y ppa:deadsnakes/ppa
-
-sudo apt-get -y update
-
-sudo apt-get -y install build-essential
-sudo apt-get -y install sshpass
-sudo apt-get -y install python3
-sudo apt-get -y install python3-pip
+sudo apt -y install build-essential
+sudo apt -y install sshpass
+sudo apt -y install python3
+sudo apt -y install python3-pip
 
 python3 -m pip install -U pip
 
-sudo apt-get -y install libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev
-sudo apt-get -y install git
-sudo apt-get -y install curl
-sudo apt-get -y install wireshark-dev
+sudo apt -y install libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev
+sudo apt -y install git
+sudo apt -y install curl
+sudo apt -y install wireshark-dev
 
+sudo pip3 install --upgrade pip
 sudo pip3 install grpcio grpcio-tools
 sudo pip3 install pyshark
 sudo pip3 install scapy
 sudo pip3 install mininet
-sudo pip3 install aiohttp
-sudo pip3 install python-socketio
-# sudo pip3 install nest_asyncio
-# sudo pip3 install flask
-# sudo pip3 install flask_socketio
 sudo pip3 install macaddress
+
 sudo pip3 install pyroute2
 SCRIPT
 
@@ -70,8 +61,18 @@ SCRIPT
 # ------------------------------------------------------------
 # install Lubutu Desktop
 # ------------------------------------------------------------
-$lubuntu_desktop = <<SCRIPT
+$install_lubuntu = <<SCRIPT
 sudo apt install -y --no-install-recommends lubuntu-desktop
+SCRIPT
+
+# ------------------------------------------------------------
+# install FRR
+# ------------------------------------------------------------
+$install_frr = <<SCRIPT
+curl -s https://deb.frrouting.org/frr/keys.asc | sudo apt-key add -
+FRRVER="frr-stable"
+echo deb https://deb.frrouting.org/frr $(lsb_release -s -c) $FRRVER | sudo tee -a /etc/apt/sources.list.d/frr.list
+sudo apt update -y && sudo apt install -y frr frr-pythontools
 SCRIPT
 
 # ------------------------------------------------------------
@@ -82,15 +83,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # vm name
     config.vm.hostname = $name + '.localhost'
     # ubuntu image
-    config.vm.box = 'bento/ubuntu-18.04'
-    # config.vm.box = 'bento/ubuntu-16.04'
+    config.vm.box = 'bento/ubuntu-20.04'
 
     # network
     config.vm.network 'private_network', ip: '10.0.0.100'
-    # port forward for ONOS
-    config.vm.network 'forwarded_port', guest: 8181, host: 8181
-    # port forward for tracing net web socket server
-    config.vm.network 'forwarded_port', guest: 8888, host: 8888
 
     # share directory
     config.vm.synced_folder './', '/home/vagrant/share'
@@ -98,7 +94,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # install package
     config.vm.provision 'shell', inline: $install_package
     config.vm.provision 'shell', inline: $install_mininet
-    config.vm.provision 'shell', inline: $lubuntu_desktop
+    config.vm.provision 'shell', inline: $install_lubuntu
+    config.vm.provision 'shell', inline: $install_frr
 
 
     # config virtual box
