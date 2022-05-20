@@ -80,4 +80,7 @@ if __name__ == '__main__':
     port = args.port
 
     agent = SRv6Agent(ip=ip, port=port, log_level=log_level, log_file=log_file)
-    agent.start()
+    try:
+        agent.start()
+    except KeyboardInterrupt:
+        agent.stop()

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x10srv6_route.proto\"\xed\x01\n\x05Route\x12\x13\n\x0b\x64\x65stination\x18\x01 \x01(\t\x12\x14\n\x07gateway\x18\x02 \x01(\tH\x01\x88\x01\x01\x12\x10\n\x03\x64\x65v\x18\x03 \x01(\tH\x02\x88\x01\x01\x12\x13\n\x06metric\x18\x04 \x01(\x05H\x03\x88\x01\x01\x12\x12\n\x05table\x18\x05 \x01(\x05H\x04\x88\x01\x01\x12 \n\nseg6_encap\x18\n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18\x0b \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x42\x07\n\x05\x65ncapB\n\n\x08_gatewayB\x06\n\x04_devB\t\n\x07_metricB\x08\n\x06_table\"O\n\tSeg6Encap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12\x17\n\x04mode\x18\x02 \x01(\x0e\x32\t.Seg6Mode\x12\x10\n\x08segments\x18\x03 \x03(\t\"\xeb\x01\n\x0eSeg6LocalEncap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12 \n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x10.Seg6LocalAction\x12\r\n\x03nh6\x18\n \x01(\tH\x00\x12\r\n\x03nh4\x18\x0b \x01(\tH\x00\x12\"\n\x03srh\x18\x0c \x01(\x0b\x32\x13.Seg6LocalEncap.SrhH\x00\x12\r\n\x03oif\x18\r \x01(\tH\x00\x12\x0f\n\x05table\x18\x0e \x01(\rH\x00\x1a\x33\n\x03Srh\x12\x10\n\x08segments\x18\x01 \x03(\t\x12\x11\n\x04hmac\x18\x02 \x01(\tH\x00\x88\x01\x01\x42\x07\n\x05_hmacB\x07\n\x05param\"\x1c\n\nRouteReply\x12\x0e\n\x06status\x18\x01 \x01(\r\"\x12\n\x10GetRoutesRequest\"\x10\n\x0eGetRoutesReply*0\n\x08Seg6Type\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04SEG6\x10\x01\x12\r\n\tSEG6LOCAL\x10\x02*.\n\x08Seg6Mode\x12\n\n\x06INLINE\x10\x00\x12\t\n\x05\x45NCAP\x10\x01\x12\x0b\n\x07L2ENCAP\x10\x02*\xe7\x01\n\x0fSeg6LocalAction\x12\x0c\n\x08NOACTION\x10\x00\x12\x07\n\x03\x45ND\x10\x01\x12\t\n\x05\x45ND_X\x10\x02\x12\t\n\x05\x45ND_T\x10\x03\x12\x0b\n\x07\x45ND_DX2\x10\x04\x12\x0b\n\x07\x45ND_DX6\x10\x05\x12\x0b\n\x07\x45ND_DX4\x10\x06\x12\x0b\n\x07\x45ND_DT6\x10\x07\x12\x0b\n\x07\x45ND_DT4\x10\x08\x12\n\n\x06\x45ND_B6\x10\t\x12\x10\n\x0c\x45ND_B6_ENCAP\x10\n\x12\n\n\x06\x45ND_BM\x10\x0b\x12\t\n\x05\x45ND_S\x10\x0c\x12\n\n\x06\x45ND_AS\x10\r\x12\n\n\x06\x45ND_AM\x10\x0e\x12\x0b\n\x07\x45ND_BPF\x10\x0f\x12\x0c\n\x08\x45ND_DT46\x10\x10\x32\x83\x01\n\x0bSeg6Service\x12\x1f\n\x08\x41\x64\x64Route\x12\x06.Route\x1a\x0b.RouteReply\x12\"\n\x0bRemoveRoute\x12\x06.Route\x1a\x0b.RouteReply\x12/\n\tGetRoutes\x12\x11.GetRoutesRequest\x1a\x0f.GetRoutesReplyb\x06proto3'
+  serialized_pb=b'\n\x10srv6_route.proto\"\xed\x01\n\x05Route\x12\x13\n\x0b\x64\x65stination\x18\x01 \x01(\t\x12\x14\n\x07gateway\x18\x02 \x01(\tH\x01\x88\x01\x01\x12\x10\n\x03\x64\x65v\x18\x03 \x01(\tH\x02\x88\x01\x01\x12\x13\n\x06metric\x18\x04 \x01(\x05H\x03\x88\x01\x01\x12\x12\n\x05table\x18\x05 \x01(\x05H\x04\x88\x01\x01\x12 \n\nseg6_encap\x18\n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18\x0b \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x42\x07\n\x05\x65ncapB\n\n\x08_gatewayB\x06\n\x04_devB\t\n\x07_metricB\x08\n\x06_table\"O\n\tSeg6Encap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12\x17\n\x04mode\x18\x02 \x01(\x0e\x32\t.Seg6Mode\x12\x10\n\x08segments\x18\x03 \x03(\t\"\xeb\x01\n\x0eSeg6LocalEncap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12 \n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x10.Seg6LocalAction\x12\r\n\x03nh6\x18\n \x01(\tH\x00\x12\r\n\x03nh4\x18\x0b \x01(\tH\x00\x12\"\n\x03srh\x18\x0c \x01(\x0b\x32\x13.Seg6LocalEncap.SrhH\x00\x12\r\n\x03oif\x18\r \x01(\tH\x00\x12\x0f\n\x05table\x18\x0e \x01(\rH\x00\x1a\x33\n\x03Srh\x12\x10\n\x08segments\x18\x01 \x03(\t\x12\x11\n\x04hmac\x18\x02 \x01(\tH\x00\x88\x01\x01\x42\x07\n\x05_hmacB\x07\n\x05param\"\x1c\n\nRouteReply\x12\x0e\n\x06status\x18\x01 \x01(\r\"\x12\n\x10GetRoutesRequest\"{\n\nReplyRoute\x12\x0e\n\x06\x66\x61mily\x18\x01 \x01(\r\x12\x0b\n\x03tos\x18\x02 \x01(\r\x12\r\n\x05proto\x18\x03 \x01(\t\x12\r\n\x05scope\x18\x04 \x01(\r\x12\x0c\n\x04type\x18\x05 \x01(\r\x12\r\n\x05\x66lags\x18\x06 \x01(\r\x12\x15\n\x05route\x18\x07 \x01(\x0b\x32\x06.Route\"-\n\x0eGetRoutesReply\x12\x1b\n\x06routes\x18\x01 \x03(\x0b\x32\x0b.ReplyRoute*0\n\x08Seg6Type\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04SEG6\x10\x01\x12\r\n\tSEG6LOCAL\x10\x02*.\n\x08Seg6Mode\x12\n\n\x06INLINE\x10\x00\x12\t\n\x05\x45NCAP\x10\x01\x12\x0b\n\x07L2ENCAP\x10\x02*\xe7\x01\n\x0fSeg6LocalAction\x12\x0c\n\x08NOACTION\x10\x00\x12\x07\n\x03\x45ND\x10\x01\x12\t\n\x05\x45ND_X\x10\x02\x12\t\n\x05\x45ND_T\x10\x03\x12\x0b\n\x07\x45ND_DX2\x10\x04\x12\x0b\n\x07\x45ND_DX6\x10\x05\x12\x0b\n\x07\x45ND_DX4\x10\x06\x12\x0b\n\x07\x45ND_DT6\x10\x07\x12\x0b\n\x07\x45ND_DT4\x10\x08\x12\n\n\x06\x45ND_B6\x10\t\x12\x10\n\x0c\x45ND_B6_ENCAP\x10\n\x12\n\n\x06\x45ND_BM\x10\x0b\x12\t\n\x05\x45ND_S\x10\x0c\x12\n\n\x06\x45ND_AS\x10\r\x12\n\n\x06\x45ND_AM\x10\x0e\x12\x0b\n\x07\x45ND_BPF\x10\x0f\x12\x0c\n\x08\x45ND_DT46\x10\x10\x32\x83\x01\n\x0bSeg6Service\x12\x1f\n\x08\x41\x64\x64Route\x12\x06.Route\x1a\x0b.RouteReply\x12\"\n\x0bRemoveRoute\x12\x06.Route\x1a\x0b.RouteReply\x12/\n\tGetRoutes\x12\x11.GetRoutesRequest\x1a\x0f.GetRoutesReplyb\x06proto3'
 )
 
 _SEG6TYPE = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _SEG6TYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=647,
-  serialized_end=695,
+  serialized_start=801,
+  serialized_end=849,
 )
 _sym_db.RegisterEnumDescriptor(_SEG6TYPE)
 
@@ -79,8 +79,8 @@ _SEG6MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=697,
-  serialized_end=743,
+  serialized_start=851,
+  serialized_end=897,
 )
 _sym_db.RegisterEnumDescriptor(_SEG6MODE)
 
@@ -180,8 +180,8 @@ _SEG6LOCALACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=746,
-  serialized_end=977,
+  serialized_start=900,
+  serialized_end=1131,
 )
 _sym_db.RegisterEnumDescriptor(_SEG6LOCALACTION)
 
@@ -536,14 +536,63 @@ _GETROUTESREQUEST = _descriptor.Descriptor(
 )
 
 
-_GETROUTESREPLY = _descriptor.Descriptor(
-  name='GetRoutesReply',
-  full_name='GetRoutesReply',
+_REPLYROUTE = _descriptor.Descriptor(
+  name='ReplyRoute',
+  full_name='ReplyRoute',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='family', full_name='ReplyRoute.family', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='tos', full_name='ReplyRoute.tos', index=1,
+      number=2, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='proto', full_name='ReplyRoute.proto', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='scope', full_name='ReplyRoute.scope', index=3,
+      number=4, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='ReplyRoute.type', index=4,
+      number=5, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='flags', full_name='ReplyRoute.flags', index=5,
+      number=6, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='route', full_name='ReplyRoute.route', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -557,7 +606,39 @@ _GETROUTESREPLY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=629,
-  serialized_end=645,
+  serialized_end=752,
+)
+
+
+_GETROUTESREPLY = _descriptor.Descriptor(
+  name='GetRoutesReply',
+  full_name='GetRoutesReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='routes', full_name='GetRoutesReply.routes', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=754,
+  serialized_end=799,
 )
 
 _ROUTE.fields_by_name['seg6_encap'].message_type = _SEG6ENCAP
@@ -604,11 +685,14 @@ _SEG6LOCALENCAP.fields_by_name['oif'].containing_oneof = _SEG6LOCALENCAP.oneofs_
 _SEG6LOCALENCAP.oneofs_by_name['param'].fields.append(
   _SEG6LOCALENCAP.fields_by_name['table'])
 _SEG6LOCALENCAP.fields_by_name['table'].containing_oneof = _SEG6LOCALENCAP.oneofs_by_name['param']
+_REPLYROUTE.fields_by_name['route'].message_type = _ROUTE
+_GETROUTESREPLY.fields_by_name['routes'].message_type = _REPLYROUTE
 DESCRIPTOR.message_types_by_name['Route'] = _ROUTE
 DESCRIPTOR.message_types_by_name['Seg6Encap'] = _SEG6ENCAP
 DESCRIPTOR.message_types_by_name['Seg6LocalEncap'] = _SEG6LOCALENCAP
 DESCRIPTOR.message_types_by_name['RouteReply'] = _ROUTEREPLY
 DESCRIPTOR.message_types_by_name['GetRoutesRequest'] = _GETROUTESREQUEST
+DESCRIPTOR.message_types_by_name['ReplyRoute'] = _REPLYROUTE
 DESCRIPTOR.message_types_by_name['GetRoutesReply'] = _GETROUTESREPLY
 DESCRIPTOR.enum_types_by_name['Seg6Type'] = _SEG6TYPE
 DESCRIPTOR.enum_types_by_name['Seg6Mode'] = _SEG6MODE
@@ -658,6 +742,13 @@ GetRoutesRequest = _reflection.GeneratedProtocolMessageType('GetRoutesRequest', 
   })
 _sym_db.RegisterMessage(GetRoutesRequest)
 
+ReplyRoute = _reflection.GeneratedProtocolMessageType('ReplyRoute', (_message.Message,), {
+  'DESCRIPTOR' : _REPLYROUTE,
+  '__module__' : 'srv6_route_pb2'
+  # @@protoc_insertion_point(class_scope:ReplyRoute)
+  })
+_sym_db.RegisterMessage(ReplyRoute)
+
 GetRoutesReply = _reflection.GeneratedProtocolMessageType('GetRoutesReply', (_message.Message,), {
   'DESCRIPTOR' : _GETROUTESREPLY,
   '__module__' : 'srv6_route_pb2'
@@ -674,8 +765,8 @@ _SEG6SERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=980,
-  serialized_end=1111,
+  serialized_start=1134,
+  serialized_end=1265,
   methods=[
   _descriptor.MethodDescriptor(
     name='AddRoute',

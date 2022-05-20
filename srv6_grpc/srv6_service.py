@@ -1,6 +1,6 @@
 from pyroute2 import IPRoute
 
-from srv6_route_pb2 import Route, RouteReply, Seg6Mode, Seg6Type, Seg6LocalAction
+from srv6_route_pb2 import Route, RouteReply, ReplyRoute, Seg6Mode, Seg6Type, Seg6LocalAction
 import srv6_route_pb2_grpc
 
 
