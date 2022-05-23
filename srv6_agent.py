@@ -31,7 +31,7 @@ class SRv6Agent:
         self.service = SRv6Service(logger=self.logger)
         self.server = None
         self.ip = ip
-        self.port = port
+        self.port = port if isinstance(port, int) else int(port)
 
     def __del__(self):
         self.stop()
@@ -43,7 +43,7 @@ class SRv6Agent:
         srv6_route_pb2_grpc.add_Seg6ServiceServicer_to_server(
             self.service, self.server
         )
-        self.server.add_insecure_port(self.ip + ':' + self.port)
+        self.server.add_insecure_port(self.ip + ':' + str(self.port))
         self.server.start()
         if block:
             self.server.wait_for_termination()
@@ -62,7 +62,7 @@ def get_args():
     parser.add_argument('--log_file', help="log file path")
 
     parser.add_argument('--ip', help='server ip address', default="[::]")
-    parser.add_argument('--port', help='listening port')
+    parser.add_argument('--port', help='listening port', default=30000)
 
     args = parser.parse_args()
     return args

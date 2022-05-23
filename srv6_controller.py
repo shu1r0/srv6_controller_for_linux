@@ -128,7 +128,7 @@ class SRv6Controller:
 
     def stop(self):
         self.close_all()
-    
+
     def read_yml(self, yml_file):
         """read yaml
 
@@ -138,62 +138,65 @@ class SRv6Controller:
         Returns:
             (list, list) : SRv6Node List and Route conf list
         """
-        added_nodes = []
-        readed_routes = []
         with open(yml_file) as f:
             dct = yaml.safe_load(f)
-            # nodes
-            nodes = dct.get('nodes')
-            for node in nodes:
-                name = node.get('name')
-                ip = node.get('ip')
-                port = node.get('port')
-                # get routes
-                routes = node.get('route', [])
-                # get headend behavior
-                headend_routes = node.get('headend', [])
-                # get end behavior
-                end_routes = node.get('end', [])
-                added_node = self.add_node(name, ip, port)
-                added_nodes.append(added_node)
+            return self.read_conf(dct)
+    
+    def read_conf(self, dct):
+        added_nodes = []
+        readed_routes = []
+        # nodes
+        nodes = dct.get('nodes')
+        for node in nodes:
+            name = node.get('name')
+            ip = node.get('ip')
+            port = node.get('port')
+            # get routes
+            routes = node.get('route', [])
+            # get headend behavior
+            headend_routes = node.get('headend', [])
+            # get end behavior
+            end_routes = node.get('end', [])
+            added_node = self.add_node(name, ip, port)
+            added_nodes.append(added_node)
 
-                for route in routes:
-                    # node name
-                    route['name'] = name
-                    readed_routes.append(route)
-                # headend behavior
-                for route in headend_routes:
-                    # nodename
-                    route['name'] = name
-                    headend = {
-                        'type': 'seg6',
-                        'mode': route.pop('mode', None),
-                        'segments': route.pop('segments', None)
+            for route in routes:
+                # node name
+                route['name'] = name
+                readed_routes.append(route)
+            # headend behavior
+            for route in headend_routes:
+                # nodename
+                route['name'] = name
+                headend = {
+                    'type': 'seg6',
+                    'mode': route.pop('mode', None),
+                    'segments': route.pop('segments', None)
+                }
+                # ip command's encap route
+                route['encap'] = headend
+                readed_routes.append(route)
+            # end behavior
+            for route in end_routes:
+                # node name
+                route['name'] = name
+                end = {
+                    'type': 'seg6local',
+                    'action': route.pop('action', None),
+                    'nh4': route.pop('nh4', None),
+                    'nh6': route.pop('nh6', None),
+                    'srh': route.pop('srh', None),
+                    'oif': route.pop('oif', None),
+                    'table': route.pop('table', None)
+                }
+                if end.get('srh'):
+                    end['srh'] = {
+                        'segments': end['srh'].get('segment'),
+                        'hmac': end['srh'].get('hmac')
                     }
-                    # ip command's encap route
-                    route['encap'] = headend
-                    readed_routes.append(route)
-                # end behavior
-                for route in end_routes:
-                    # node name
-                    route['name'] = name
-                    end = {
-                        'type': 'seg6local',
-                        'action': route.pop('action', None),
-                        'nh4': route.pop('nh4', None),
-                        'nh6': route.pop('nh6', None),
-                        'srh': route.pop('srh', None),
-                        'oif': route.pop('oif', None),
-                        'table': route.pop('table', None)
-                    }
-                    if end.get('srh'):
-                        end['srh'] = {
-                            'segments': end['srh'].get('segment'),
-                            'hmac': end['srh'].get('hmac')
-                        }
-                    # ip encap route
-                    route['encap'] = end
-                    readed_routes.append(route)
+                # ip encap route
+                route['encap'] = end
+                readed_routes.append(route)
 
         self._route_conf.extend(readed_routes)
         return added_nodes, readed_routes
