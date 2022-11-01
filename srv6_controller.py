@@ -150,7 +150,9 @@ class SRv6Controller:
         for node in nodes:
             name = node.get('name')
             ip = node.get('ip')
-            port = node.get('port')
+            port = node.get('port', None)
+            if port is None:
+                port = node.get("controller_port", None)
             # get routes
             routes = node.get('route', [])
             # get headend behavior

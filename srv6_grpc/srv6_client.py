@@ -49,7 +49,7 @@ class SRv6Client:
             raise NoChannelException
         route_req = self._params_2_route_req(destination, gateway, dev, metric, table, encap)
         self.logger.debug("add route (req={})".format(route_req))
-        reply = self.stub.AddRoute(route_req)
+        reply = self.stub.AddRoute(route_req, timeout=1)
         if reply.status != 0:
             raise ChangeRouteException
         return route_req
@@ -60,7 +60,7 @@ class SRv6Client:
             raise NoChannelException
         route_req = self._params_2_route_req(destination, gateway, dev, metric, table, encap)
         self.logger.debug("remove route (req={})".format(route_req))
-        reply = self.stub.RemoveRoute(route_req)
+        reply = self.stub.RemoveRoute(route_req, timeout=1)
         if reply.status != 0:
             raise ChangeRouteException
         return route_req

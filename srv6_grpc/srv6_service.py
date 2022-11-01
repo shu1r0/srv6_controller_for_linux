@@ -1,6 +1,6 @@
 from pyroute2 import IPRoute
 
-from srv6_route_pb2 import Route, RouteReply, ReplyRoute, Seg6Mode, Seg6Type, Seg6LocalAction
+from srv6_route_pb2 import Route, RouteReply, ReplyRoute, Seg6Mode, Seg6Type, Seg6LocalAction, GetRoutesReply
 import srv6_route_pb2_grpc
 
 
@@ -36,6 +36,9 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         # get access to the netlink socket
         self.ipr = IPRoute()
         self.logger = logger
+
+    def __del__(self):
+        self.ipr.close()
 
     def AddRoute(self, request, context):
         self.logger.debug("AddRoute called by peer({})".format(context.peer()))
@@ -126,9 +129,10 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
             encap_mode (str) : seg6 encap mode (e.g. 'encap')
             encap_segs (list[str]) : segments
         """
-        self.logger.debug("add route dst={}, {}".format(dst, params))
+        # self.logger.debug("add route dst={}, {}".format(dst, params))
         try:        
             self.ipr.route('add', dst=dst, **params)
+            self.logger.debug("add route dst={}, {}".format(dst, params))
         except Exception as e:
             self.logger.error(e)
             raise e
@@ -171,7 +175,7 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
     def _parse_routes(self, routes):
         pass
     
-    def _parse_route(self, route):
+    def _parse_routes(self, routes: list):
         """
 
         Args:
@@ -183,15 +187,14 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         Todo:
             * parse route
         """
+        rep = GetRoutesReply()
+        for r in routes:
+            pass
+
+    def _parse_route(self, route: dict) -> ReplyRoute:
         rep_route = ReplyRoute()
-        rep_route.family = route.get("family")
-        rep_route.tos = route.get("tos")
-        # convert string
-        rep_route.proto = route.get("proto")
-        rep_route.type = route.get("type")
-        rep_route.flags = route.get("flags")
-        
-        dst_len = route.get("dst_len")
-        #todo route 'attrs': [('RTA_TABLE', 255), ('RTA_DST', 'fe80::'), ('RTA_PRIORITY', 0), ('RTA_OIF', 4), ('RTA_CACHEINFO', {'rta_clntref': 0, 'rta_lastuse': 0, 'rta_expires': 0, 'rta_error': 0, 'rta_used': 0, 'rta_id': 0, 'rta_ts': 0, 'rta_tsage': 0}), ('RTA_PREF', 0)]
-        
-        return rep_route
+        rep_route.dst = route.get("dst")
+        rep_route.oif = route.get("oif")
+        rep_route.gateway = route.get("gateway", None)
+        rep_route.priority = route.get("priority", None)
+        pass

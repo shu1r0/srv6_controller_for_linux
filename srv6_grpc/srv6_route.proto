@@ -106,14 +106,21 @@ message GetRoutesRequest {
 
 
 message ReplyRoute {
-  uint32 family = 1;
-  uint32 tos = 2;
-  string proto = 3;
-  uint32 scope = 4;
-  uint32 type = 5;
-  uint32 flags = 6;
+  string dst = 1;
+  string oif = 2;  // dev
+  optional string gateway = 3;
+  optional int32 priority = 4;
+  optional string prefsrc = 5;
+//  optional string metrics = 6;
+  repeated ReplyRoute multipath = 7;
 
-  Route route = 7;
+  string table = 10;
+  oneof encap {
+    Seg6Encap seg6_encap = 110;
+    Seg6LocalEncap seg6local_encap = 111;
+  }
+  optional string proto = 12;
+  optional int32 scope = 13;
 }
 
 message GetRoutesReply {
