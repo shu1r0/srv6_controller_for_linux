@@ -51,10 +51,10 @@ enum Seg6LocalAction {
 message Route {
   // network address or default
   string destination = 1;
-  optional string gateway = 2;
-  optional string dev = 3;
-  optional int32 metric = 4;
-  optional int32 table = 5;
+  string gateway = 2;
+  string dev = 3;
+  int32 metric = 4;
+  int32 table = 5;
 
   oneof encap {
     Seg6Encap seg6_encap = 10;
@@ -89,7 +89,7 @@ message Seg6LocalEncap {
 
   message Srh {
     repeated string segments = 1;
-    optional string hmac = 2;
+    string hmac = 2;
   }
 }
 
@@ -108,10 +108,10 @@ message GetRoutesRequest {
 message ReplyRoute {
   string dst = 1;
   string oif = 2;  // dev
-  optional string gateway = 3;
-  optional int32 priority = 4;
-  optional string prefsrc = 5;
-//  optional string metrics = 6;
+  string gateway = 3;
+  int32 priority = 4;
+  string prefsrc = 5;
+//  string metrics = 6;
   repeated ReplyRoute multipath = 7;
 
   string table = 10;
@@ -119,8 +119,8 @@ message ReplyRoute {
     Seg6Encap seg6_encap = 110;
     Seg6LocalEncap seg6local_encap = 111;
   }
-  optional string proto = 12;
-  optional int32 scope = 13;
+  string proto = 12;
+  int32 scope = 13;
 }
 
 message GetRoutesReply {
