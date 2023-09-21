@@ -132,6 +132,7 @@ message GetRoutesReply {
  */
 service Seg6Service {
   rpc AddRoute(Route) returns (RouteReply);
+  rpc ReplaceRoute(Route) returns (RouteReply);
   rpc RemoveRoute(Route) returns (RouteReply);
   rpc GetRoutes(GetRoutesRequest) returns (GetRoutesReply);
 }

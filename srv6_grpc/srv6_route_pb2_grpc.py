@@ -21,6 +21,11 @@ class Seg6ServiceStub(object):
                 request_serializer=srv6__route__pb2.Route.SerializeToString,
                 response_deserializer=srv6__route__pb2.RouteReply.FromString,
                 )
+        self.ReplaceRoute = channel.unary_unary(
+                '/Seg6Service/ReplaceRoute',
+                request_serializer=srv6__route__pb2.Route.SerializeToString,
+                response_deserializer=srv6__route__pb2.RouteReply.FromString,
+                )
         self.RemoveRoute = channel.unary_unary(
                 '/Seg6Service/RemoveRoute',
                 request_serializer=srv6__route__pb2.Route.SerializeToString,
@@ -44,6 +49,12 @@ class Seg6ServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ReplaceRoute(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def RemoveRoute(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -61,6 +72,11 @@ def add_Seg6ServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'AddRoute': grpc.unary_unary_rpc_method_handler(
                     servicer.AddRoute,
+                    request_deserializer=srv6__route__pb2.Route.FromString,
+                    response_serializer=srv6__route__pb2.RouteReply.SerializeToString,
+            ),
+            'ReplaceRoute': grpc.unary_unary_rpc_method_handler(
+                    servicer.ReplaceRoute,
                     request_deserializer=srv6__route__pb2.Route.FromString,
                     response_serializer=srv6__route__pb2.RouteReply.SerializeToString,
             ),
@@ -98,6 +114,23 @@ class Seg6Service(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Seg6Service/AddRoute',
+            srv6__route__pb2.Route.SerializeToString,
+            srv6__route__pb2.RouteReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ReplaceRoute(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Seg6Service/ReplaceRoute',
             srv6__route__pb2.Route.SerializeToString,
             srv6__route__pb2.RouteReply.FromString,
             options, channel_credentials,

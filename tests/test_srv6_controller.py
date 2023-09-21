@@ -29,12 +29,16 @@ class TestSRv6Controller(TestCase):
         def add_route(**param):
             self.add_route_param = param
 
+        def replace_route(**param):
+            self.replace_route_param = param
+
         def del_route(**param):
             self.del_route_param = param
 
         # set stub
         self.agent.service._add_route = add_route
         self.agent.service._del_route = del_route
+        self.agent.service._replace_route = replace_route
 
     def test_send(self):
         self.agent.start(block=False)
@@ -43,4 +47,5 @@ class TestSRv6Controller(TestCase):
         self.controller.read_conf(yaml.safe_load(local_conf1))
         self.controller.start()
         sleep(1)
-        print(self.add_route_param)
+        # print(self.add_route_param)
+        print(self.replace_route_param)

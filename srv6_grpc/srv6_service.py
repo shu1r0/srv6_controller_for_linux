@@ -49,6 +49,15 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         except Exception:
             return RouteReply(status=-1)
 
+    def ReplaceRoute(self, request, context):
+        self.logger.debug("ReplaceRoute called by peer({})".format(context.peer()))
+        params = self._route_req_2_params(request)
+        try:
+            self._replace_route(**params)
+            return RouteReply(status=0)
+        except Exception:
+            return RouteReply(status=-1)
+
     def RemoveRoute(self, request, context):
         self.logger.debug("RemoveRoute called by peer({})".format(context.peer()))
         params = self._route_req_2_params(request)
@@ -133,6 +142,26 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         try:        
             self.ipr.route('add', dst=dst, **params)
             self.logger.debug("add route dst={}, {}".format(dst, params))
+        except Exception as e:
+            self.logger.error(e)
+            raise e
+
+    def _replace_route(self, dst, **params):
+        """replace seg6 route
+
+        References:
+            https://github.com/svinota/pyroute2/blob/5ce9ccae0e47e02873f8d12d9e18ed4734e805fc/pyroute2.core/pr2modules/iproute/linux.py#L1787
+
+        Args:
+            dst (str) : destination
+            idx (int) : out going traffic interface index
+            encap_mode (str) : seg6 encap mode (e.g. 'encap')
+            encap_segs (list[str]) : segments
+        """
+        # self.logger.debug("add route dst={}, {}".format(dst, params))
+        try:
+            self.ipr.route('replace', dst=dst, **params)
+            self.logger.debug("replace route dst={}, {}".format(dst, params))
         except Exception as e:
             self.logger.error(e)
             raise e

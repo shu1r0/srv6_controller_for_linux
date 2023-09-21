@@ -54,6 +54,17 @@ class SRv6Client:
             raise ChangeRouteException
         return route_req
 
+    def replace_route(self, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
+        """replace srv6 route"""
+        if not self.has_established_channel():
+            raise NoChannelException
+        route_req = self._params_2_route_req(destination, gateway, dev, metric, table, encap)
+        self.logger.debug("replace route (req={})".format(route_req))
+        reply = self.stub.ReplaceRoute(route_req, timeout=1)
+        if reply.status != 0:
+            raise ChangeRouteException
+        return route_req
+
     def remove_route(self, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
         """remove srv6 route"""
         if not self.has_established_channel():

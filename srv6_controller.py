@@ -110,10 +110,22 @@ class SRv6Controller:
             node.close_channel()
 
     def add_route(self, name, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
-        return self.get(name).add_route(destination, gateway, dev, metric, table, encap)
+        try:
+            return self.get(name).add_route(destination, gateway, dev, metric, table, encap)
+        except Exception as e:
+            self.logger.error("Add route error: {}".format(str(e)))
+
+    def replace_route(self, name, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
+        try:
+            return self.get(name).replace_route(destination, gateway, dev, metric, table, encap)
+        except Exception as e:
+            self.logger.error("Replace route error: {}".format(str(e)))
 
     def remove_route(self, name, destination, gateway=None, dev=None, metric=None, table=None, encap=None):
-        return self.get(name).remove_route(destination, gateway, dev, metric, table, encap)
+        try:
+            return self.get(name).remove_route(destination, gateway, dev, metric, table, encap)
+        except Exception as e:
+            self.logger.error("Remove route error: {}".format(str(e)))
 
     def add_routes(self):
         """add read conf route"""
@@ -121,10 +133,29 @@ class SRv6Controller:
             self.add_route(**route)
         self._route_conf = []
 
-    def start(self):
+    def replace_routes(self):
+        """replace read conf route"""
+        for route in self._route_conf:
+            self.replace_route(**route)
+        self._route_conf = []
+
+    def remove_routes(self):
+        """remove read conf route"""
+        for route in self._route_conf:
+            self.remove_route(**route)
+        self._route_conf = []
+
+    def start(self, method="replace"):
         self.logger.info("start controller (nodes = {})".format(self.nodes))
         self.connect_all()
-        self.add_routes()
+        if method == "add":
+            self.add_routes()
+        elif method == "replace":
+            self.replace_routes()
+        elif method == "remove":
+            self.remove_routes()
+        else:
+            self.logger.error("Invalid method {}".format(method))
 
     def stop(self):
         self.close_all()
