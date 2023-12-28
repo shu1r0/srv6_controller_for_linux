@@ -99,7 +99,7 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
                 "segs": route_req.seg6_encap.segments
             }
             params["encap"] = encap_params
-        if route_req.WhichOneof("encap") == "seg6local_encap":
+        elif route_req.WhichOneof("encap") == "seg6local_encap":
             encap_params = {
                 "type": Seg6Type.Name(route_req.seg6local_encap.type).lower(),
                 "action": Seg6LocalAction2string[route_req.seg6local_encap.action]
@@ -110,11 +110,12 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
             if route_req.seg6local_encap.WhichOneof("param") == "nh4":
                 encap_params["nh4"] = route_req.seg6local_encap.nh4
             if route_req.seg6local_encap.WhichOneof("param") == "srh":
+                srh = route_req.seg6local_encap.srh
                 srh_params = {
-                    "segs": route_req.seg6local_encap.srh.segments
+                    "segs": srh.segments
                 }
-                if route_req.seg6local_encap.srh.hmac:
-                    srh_params["hmac"] = route_req.seg6local_encap.srh.hmac
+                if srh.hmac:
+                    srh_params["hmac"] = srh.hmac
                 encap_params["srh"] = srh_params
             if route_req.seg6local_encap.WhichOneof("param") == "oif":
                 links = self.ipr.link_lookup(ifname=route_req.seg6local_encap.oif) if route_req.seg6local_encap.oif else []
@@ -122,6 +123,12 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
                     encap_params["oif"] = links[0]
             if route_req.seg6local_encap.WhichOneof("param") == "table":
                 encap_params["vrf_table"] = route_req.seg6local_encap.table
+            if route_req.seg6local_encap.WhichOneof("param") == "bpf":
+                bpf = route_req.seg6local_encap.bpf
+                encap_params["bpf"] = {
+                    "fd": bpf.fd,
+                    "name": bpf.name,
+                }
             params["encap"] = encap_params
 
         return params
@@ -200,9 +207,6 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
         """
         routes = self.ipr.get_routes()
         return routes
-
-    def _parse_routes(self, routes):
-        pass
     
     def _parse_routes(self, routes: list):
         """
@@ -222,8 +226,16 @@ class SRv6Service(srv6_route_pb2_grpc.Seg6ServiceServicer):
 
     def _parse_route(self, route: dict) -> ReplyRoute:
         rep_route = ReplyRoute()
-        rep_route.dst = route.get("dst")
-        rep_route.oif = route.get("oif")
-        rep_route.gateway = route.get("gateway", None)
-        rep_route.priority = route.get("priority", None)
+        rep_route.family = route.get("family")
+        rep_route.dst_len = route.get("dst_len")
+        attrs = route.get("attrs", [])
+        for attr in attrs:
+            rep_route.dst = attr.get("RTA_DST")
+            rep_route.oif = attr.get("RTA_OIF")
+            rep_route.gateway = attr.get("RTA_GATEWAY")
+            rep_route.metrics = attr.get("RTA_METRICS")
+            rep_route.table = attr.get("RTA_TABLE")
+            rep_route.priority = attr.get("RTA_PRIORITY")
+        
+        # todo
         pass

@@ -85,11 +85,17 @@ message Seg6LocalEncap {
     Srh srh = 12;
     string oif = 13;  // out interface
     uint32 table = 14;  // table
+    Bpf bpf = 15;
   }
 
   message Srh {
     repeated string segments = 1;
     string hmac = 2;
+  }
+
+  message Bpf {
+    uint64 fd = 1;
+    string name = 2;
   }
 }
 
@@ -101,7 +107,7 @@ message RouteReply {
 }
 
 message GetRoutesRequest {
-  // pass
+  // Todo
 }
 
 

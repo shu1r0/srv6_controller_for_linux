@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10srv6_route.proto\"\xb0\x01\n\x05Route\x12\x13\n\x0b\x64\x65stination\x18\x01 \x01(\t\x12\x0f\n\x07gateway\x18\x02 \x01(\t\x12\x0b\n\x03\x64\x65v\x18\x03 \x01(\t\x12\x0e\n\x06metric\x18\x04 \x01(\x05\x12\r\n\x05table\x18\x05 \x01(\x05\x12 \n\nseg6_encap\x18\n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18\x0b \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x42\x07\n\x05\x65ncap\"O\n\tSeg6Encap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12\x17\n\x04mode\x18\x02 \x01(\x0e\x32\t.Seg6Mode\x12\x10\n\x08segments\x18\x03 \x03(\t\"\xdd\x01\n\x0eSeg6LocalEncap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12 \n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x10.Seg6LocalAction\x12\r\n\x03nh6\x18\n \x01(\tH\x00\x12\r\n\x03nh4\x18\x0b \x01(\tH\x00\x12\"\n\x03srh\x18\x0c \x01(\x0b\x32\x13.Seg6LocalEncap.SrhH\x00\x12\r\n\x03oif\x18\r \x01(\tH\x00\x12\x0f\n\x05table\x18\x0e \x01(\rH\x00\x1a%\n\x03Srh\x12\x10\n\x08segments\x18\x01 \x03(\t\x12\x0c\n\x04hmac\x18\x02 \x01(\tB\x07\n\x05param\"\x1c\n\nRouteReply\x12\x0e\n\x06status\x18\x01 \x01(\r\"\x12\n\x10GetRoutesRequest\"\xfe\x01\n\nReplyRoute\x12\x0b\n\x03\x64st\x18\x01 \x01(\t\x12\x0b\n\x03oif\x18\x02 \x01(\t\x12\x0f\n\x07gateway\x18\x03 \x01(\t\x12\x10\n\x08priority\x18\x04 \x01(\x05\x12\x0f\n\x07prefsrc\x18\x05 \x01(\t\x12\x1e\n\tmultipath\x18\x07 \x03(\x0b\x32\x0b.ReplyRoute\x12\r\n\x05table\x18\n \x01(\t\x12 \n\nseg6_encap\x18n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18o \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x12\r\n\x05proto\x18\x0c \x01(\t\x12\r\n\x05scope\x18\r \x01(\x05\x42\x07\n\x05\x65ncap\"-\n\x0eGetRoutesReply\x12\x1b\n\x06routes\x18\x01 \x03(\x0b\x32\x0b.ReplyRoute*0\n\x08Seg6Type\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04SEG6\x10\x01\x12\r\n\tSEG6LOCAL\x10\x02*.\n\x08Seg6Mode\x12\n\n\x06INLINE\x10\x00\x12\t\n\x05\x45NCAP\x10\x01\x12\x0b\n\x07L2ENCAP\x10\x02*\xe7\x01\n\x0fSeg6LocalAction\x12\x0c\n\x08NOACTION\x10\x00\x12\x07\n\x03\x45ND\x10\x01\x12\t\n\x05\x45ND_X\x10\x02\x12\t\n\x05\x45ND_T\x10\x03\x12\x0b\n\x07\x45ND_DX2\x10\x04\x12\x0b\n\x07\x45ND_DX6\x10\x05\x12\x0b\n\x07\x45ND_DX4\x10\x06\x12\x0b\n\x07\x45ND_DT6\x10\x07\x12\x0b\n\x07\x45ND_DT4\x10\x08\x12\n\n\x06\x45ND_B6\x10\t\x12\x10\n\x0c\x45ND_B6_ENCAP\x10\n\x12\n\n\x06\x45ND_BM\x10\x0b\x12\t\n\x05\x45ND_S\x10\x0c\x12\n\n\x06\x45ND_AS\x10\r\x12\n\n\x06\x45ND_AM\x10\x0e\x12\x0b\n\x07\x45ND_BPF\x10\x0f\x12\x0c\n\x08\x45ND_DT46\x10\x10\x32\xa8\x01\n\x0bSeg6Service\x12\x1f\n\x08\x41\x64\x64Route\x12\x06.Route\x1a\x0b.RouteReply\x12#\n\x0cReplaceRoute\x12\x06.Route\x1a\x0b.RouteReply\x12\"\n\x0bRemoveRoute\x12\x06.Route\x1a\x0b.RouteReply\x12/\n\tGetRoutes\x12\x11.GetRoutesRequest\x1a\x0f.GetRoutesReplyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10srv6_route.proto\"\xb0\x01\n\x05Route\x12\x13\n\x0b\x64\x65stination\x18\x01 \x01(\t\x12\x0f\n\x07gateway\x18\x02 \x01(\t\x12\x0b\n\x03\x64\x65v\x18\x03 \x01(\t\x12\x0e\n\x06metric\x18\x04 \x01(\x05\x12\r\n\x05table\x18\x05 \x01(\x05\x12 \n\nseg6_encap\x18\n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18\x0b \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x42\x07\n\x05\x65ncap\"O\n\tSeg6Encap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12\x17\n\x04mode\x18\x02 \x01(\x0e\x32\t.Seg6Mode\x12\x10\n\x08segments\x18\x03 \x03(\t\"\xa2\x02\n\x0eSeg6LocalEncap\x12\x17\n\x04type\x18\x01 \x01(\x0e\x32\t.Seg6Type\x12 \n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x10.Seg6LocalAction\x12\r\n\x03nh6\x18\n \x01(\tH\x00\x12\r\n\x03nh4\x18\x0b \x01(\tH\x00\x12\"\n\x03srh\x18\x0c \x01(\x0b\x32\x13.Seg6LocalEncap.SrhH\x00\x12\r\n\x03oif\x18\r \x01(\tH\x00\x12\x0f\n\x05table\x18\x0e \x01(\rH\x00\x12\"\n\x03\x62pf\x18\x0f \x01(\x0b\x32\x13.Seg6LocalEncap.BpfH\x00\x1a%\n\x03Srh\x12\x10\n\x08segments\x18\x01 \x03(\t\x12\x0c\n\x04hmac\x18\x02 \x01(\t\x1a\x1f\n\x03\x42pf\x12\n\n\x02\x66\x64\x18\x01 \x01(\x04\x12\x0c\n\x04name\x18\x02 \x01(\tB\x07\n\x05param\"\x1c\n\nRouteReply\x12\x0e\n\x06status\x18\x01 \x01(\r\"\x12\n\x10GetRoutesRequest\"\xfe\x01\n\nReplyRoute\x12\x0b\n\x03\x64st\x18\x01 \x01(\t\x12\x0b\n\x03oif\x18\x02 \x01(\t\x12\x0f\n\x07gateway\x18\x03 \x01(\t\x12\x10\n\x08priority\x18\x04 \x01(\x05\x12\x0f\n\x07prefsrc\x18\x05 \x01(\t\x12\x1e\n\tmultipath\x18\x07 \x03(\x0b\x32\x0b.ReplyRoute\x12\r\n\x05table\x18\n \x01(\t\x12 \n\nseg6_encap\x18n \x01(\x0b\x32\n.Seg6EncapH\x00\x12*\n\x0fseg6local_encap\x18o \x01(\x0b\x32\x0f.Seg6LocalEncapH\x00\x12\r\n\x05proto\x18\x0c \x01(\t\x12\r\n\x05scope\x18\r \x01(\x05\x42\x07\n\x05\x65ncap\"-\n\x0eGetRoutesReply\x12\x1b\n\x06routes\x18\x01 \x03(\x0b\x32\x0b.ReplyRoute*0\n\x08Seg6Type\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04SEG6\x10\x01\x12\r\n\tSEG6LOCAL\x10\x02*.\n\x08Seg6Mode\x12\n\n\x06INLINE\x10\x00\x12\t\n\x05\x45NCAP\x10\x01\x12\x0b\n\x07L2ENCAP\x10\x02*\xe7\x01\n\x0fSeg6LocalAction\x12\x0c\n\x08NOACTION\x10\x00\x12\x07\n\x03\x45ND\x10\x01\x12\t\n\x05\x45ND_X\x10\x02\x12\t\n\x05\x45ND_T\x10\x03\x12\x0b\n\x07\x45ND_DX2\x10\x04\x12\x0b\n\x07\x45ND_DX6\x10\x05\x12\x0b\n\x07\x45ND_DX4\x10\x06\x12\x0b\n\x07\x45ND_DT6\x10\x07\x12\x0b\n\x07\x45ND_DT4\x10\x08\x12\n\n\x06\x45ND_B6\x10\t\x12\x10\n\x0c\x45ND_B6_ENCAP\x10\n\x12\n\n\x06\x45ND_BM\x10\x0b\x12\t\n\x05\x45ND_S\x10\x0c\x12\n\n\x06\x45ND_AS\x10\r\x12\n\n\x06\x45ND_AM\x10\x0e\x12\x0b\n\x07\x45ND_BPF\x10\x0f\x12\x0c\n\x08\x45ND_DT46\x10\x10\x32\xa8\x01\n\x0bSeg6Service\x12\x1f\n\x08\x41\x64\x64Route\x12\x06.Route\x1a\x0b.RouteReply\x12#\n\x0cReplaceRoute\x12\x06.Route\x1a\x0b.RouteReply\x12\"\n\x0bRemoveRoute\x12\x06.Route\x1a\x0b.RouteReply\x12/\n\tGetRoutes\x12\x11.GetRoutesRequest\x1a\x0f.GetRoutesReplyb\x06proto3')
 
 _SEG6TYPE = DESCRIPTOR.enum_types_by_name['Seg6Type']
 Seg6Type = enum_type_wrapper.EnumTypeWrapper(_SEG6TYPE)
@@ -52,6 +52,7 @@ _ROUTE = DESCRIPTOR.message_types_by_name['Route']
 _SEG6ENCAP = DESCRIPTOR.message_types_by_name['Seg6Encap']
 _SEG6LOCALENCAP = DESCRIPTOR.message_types_by_name['Seg6LocalEncap']
 _SEG6LOCALENCAP_SRH = _SEG6LOCALENCAP.nested_types_by_name['Srh']
+_SEG6LOCALENCAP_BPF = _SEG6LOCALENCAP.nested_types_by_name['Bpf']
 _ROUTEREPLY = DESCRIPTOR.message_types_by_name['RouteReply']
 _GETROUTESREQUEST = DESCRIPTOR.message_types_by_name['GetRoutesRequest']
 _REPLYROUTE = DESCRIPTOR.message_types_by_name['ReplyRoute']
@@ -78,12 +79,20 @@ Seg6LocalEncap = _reflection.GeneratedProtocolMessageType('Seg6LocalEncap', (_me
     # @@protoc_insertion_point(class_scope:Seg6LocalEncap.Srh)
     })
   ,
+
+  'Bpf' : _reflection.GeneratedProtocolMessageType('Bpf', (_message.Message,), {
+    'DESCRIPTOR' : _SEG6LOCALENCAP_BPF,
+    '__module__' : 'srv6_route_pb2'
+    # @@protoc_insertion_point(class_scope:Seg6LocalEncap.Bpf)
+    })
+  ,
   'DESCRIPTOR' : _SEG6LOCALENCAP,
   '__module__' : 'srv6_route_pb2'
   # @@protoc_insertion_point(class_scope:Seg6LocalEncap)
   })
 _sym_db.RegisterMessage(Seg6LocalEncap)
 _sym_db.RegisterMessage(Seg6LocalEncap.Srh)
+_sym_db.RegisterMessage(Seg6LocalEncap.Bpf)
 
 RouteReply = _reflection.GeneratedProtocolMessageType('RouteReply', (_message.Message,), {
   'DESCRIPTOR' : _ROUTEREPLY,
@@ -117,28 +126,30 @@ _SEG6SERVICE = DESCRIPTOR.services_by_name['Seg6Service']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _SEG6TYPE._serialized_start=858
-  _SEG6TYPE._serialized_end=906
-  _SEG6MODE._serialized_start=908
-  _SEG6MODE._serialized_end=954
-  _SEG6LOCALACTION._serialized_start=957
-  _SEG6LOCALACTION._serialized_end=1188
+  _SEG6TYPE._serialized_start=927
+  _SEG6TYPE._serialized_end=975
+  _SEG6MODE._serialized_start=977
+  _SEG6MODE._serialized_end=1023
+  _SEG6LOCALACTION._serialized_start=1026
+  _SEG6LOCALACTION._serialized_end=1257
   _ROUTE._serialized_start=21
   _ROUTE._serialized_end=197
   _SEG6ENCAP._serialized_start=199
   _SEG6ENCAP._serialized_end=278
   _SEG6LOCALENCAP._serialized_start=281
-  _SEG6LOCALENCAP._serialized_end=502
-  _SEG6LOCALENCAP_SRH._serialized_start=456
-  _SEG6LOCALENCAP_SRH._serialized_end=493
-  _ROUTEREPLY._serialized_start=504
-  _ROUTEREPLY._serialized_end=532
-  _GETROUTESREQUEST._serialized_start=534
-  _GETROUTESREQUEST._serialized_end=552
-  _REPLYROUTE._serialized_start=555
-  _REPLYROUTE._serialized_end=809
-  _GETROUTESREPLY._serialized_start=811
-  _GETROUTESREPLY._serialized_end=856
-  _SEG6SERVICE._serialized_start=1191
-  _SEG6SERVICE._serialized_end=1359
+  _SEG6LOCALENCAP._serialized_end=571
+  _SEG6LOCALENCAP_SRH._serialized_start=492
+  _SEG6LOCALENCAP_SRH._serialized_end=529
+  _SEG6LOCALENCAP_BPF._serialized_start=531
+  _SEG6LOCALENCAP_BPF._serialized_end=562
+  _ROUTEREPLY._serialized_start=573
+  _ROUTEREPLY._serialized_end=601
+  _GETROUTESREQUEST._serialized_start=603
+  _GETROUTESREQUEST._serialized_end=621
+  _REPLYROUTE._serialized_start=624
+  _REPLYROUTE._serialized_end=878
+  _GETROUTESREPLY._serialized_start=880
+  _GETROUTESREPLY._serialized_end=925
+  _SEG6SERVICE._serialized_start=1260
+  _SEG6SERVICE._serialized_end=1428
 # @@protoc_insertion_point(module_scope)

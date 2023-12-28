@@ -20,7 +20,7 @@ class SRv6Agent:
         logger (Logger) : logger
     """
 
-    def __init__(self, ip, port, log_level=INFO, log_file=None):
+    def __init__(self, ip: str, port: str or int, log_level=INFO, log_file=None):
         # set logger
         self.logger = getLogger(__name__)
         self.logger.setLevel(log_level)

@@ -14,10 +14,17 @@ nodes:
     route:
       - destination: "192.168.254.0/24"
         table: 100
-        dev: eth0
+        dev: lo
       - destination: "192.168.253.0/24"
         table: 100
-        dev: eth0
+        dev: lo
+    end:
+      - destination: "fdbb:c1::2:0"
+        action: End.BPF
+        bpf:
+          fd: 1
+          name: "End.TEST"
+        dev: lo
 """
 
 
@@ -26,14 +33,18 @@ class TestSRv6Controller(TestCase):
     def setUp(self) -> None:
         self.agent = SRv6Agent(ip="[::]", port=30000)
 
+        self.add_route_param = []
+        self.replace_route_param = []
+        self.del_route_param = []
+
         def add_route(**param):
-            self.add_route_param = param
+            self.add_route_param.append(param)
 
         def replace_route(**param):
-            self.replace_route_param = param
+            self.replace_route_param.append(param)
 
         def del_route(**param):
-            self.del_route_param = param
+            self.del_route_param.append(param)
 
         # set stub
         self.agent.service._add_route = add_route

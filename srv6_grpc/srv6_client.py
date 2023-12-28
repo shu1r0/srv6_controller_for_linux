@@ -22,7 +22,7 @@ class SRv6Client:
         stub : grpc service stub
     """
 
-    def __init__(self, ip, port, logger):
+    def __init__(self, ip: str, port: str or int, logger):
         self.ip = ip
         self.port = port if isinstance(port, str) else str(port)
         self.channel = None
@@ -132,8 +132,14 @@ class SRv6Client:
                 oif = encap.pop("oif", None)
                 if oif:
                     seg6local_encap.oif = oif
+                # table
                 table = encap.pop("table", None)
                 if table:
                     seg6local_encap.table = table
+                # bpf
+                bpf = encap.pop("bpf", None)
+                if bpf:
+                    seg6local_encap.bpf.fd = bpf.pop("fd")
+                    seg6local_encap.bpf.name = bpf.pop("name", str(seg6local_encap.bpf.fd))
                 route_req.seg6local_encap.CopyFrom(seg6local_encap)
         return route_req

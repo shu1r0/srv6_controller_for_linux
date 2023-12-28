@@ -14,7 +14,7 @@ class SRv6Node(SRv6Client):
         name (string) : node name
     """
 
-    def __init__(self, name, ip, port, logger=None):
+    def __init__(self, name: str, ip: str, port: str or int, logger=None):
         if logger is None:
             logger = getLogger(__name__)
         super(SRv6Node, self).__init__(ip, port, logger)
@@ -43,6 +43,11 @@ class SRv6Controller:
         self.logger = logger if logger else getLogger(__name__)
         
         self._route_conf: list = []
+        self.default_method = "replace"
+
+    @property
+    def route_conf(self):
+        return self._route_conf
 
     def add_node(self, name, ip, port):
         """add SRv6 Node
@@ -127,35 +132,24 @@ class SRv6Controller:
         except Exception as e:
             self.logger.error("Remove route error: {}".format(str(e)))
 
-    def add_routes(self):
+    def _run_conf_routes(self):
         """add read conf route"""
         for route in self._route_conf:
-            self.add_route(**route)
+            method = route.pop("method", self.default_method)
+            if method == "add":
+                self.add_route(**route)
+            elif method == "replace":
+                self.replace_route(**route)
+            elif method == "remove":
+                self.remove_route(**route)
+            else:
+                self.logger.error("Invalid method {}".format(method))
         self._route_conf = []
 
-    def replace_routes(self):
-        """replace read conf route"""
-        for route in self._route_conf:
-            self.replace_route(**route)
-        self._route_conf = []
-
-    def remove_routes(self):
-        """remove read conf route"""
-        for route in self._route_conf:
-            self.remove_route(**route)
-        self._route_conf = []
-
-    def start(self, method="replace"):
+    def start(self):
         self.logger.info("start controller (nodes = {})".format(self.nodes))
         self.connect_all()
-        if method == "add":
-            self.add_routes()
-        elif method == "replace":
-            self.replace_routes()
-        elif method == "remove":
-            self.remove_routes()
-        else:
-            self.logger.error("Invalid method {}".format(method))
+        self._run_conf_routes()
 
     def stop(self):
         self.close_all()
@@ -193,14 +187,17 @@ class SRv6Controller:
             added_node = self.add_node(name, ip, port)
             added_nodes.append(added_node)
 
+            # routes
             for route in routes:
                 # node name
                 route['name'] = name
+                route.setdefault("method", self.default_method)
                 readed_routes.append(route)
             # headend behavior
             for route in headend_routes:
                 # nodename
                 route['name'] = name
+                route.setdefault("method", self.default_method)
                 headend = {
                     'type': 'seg6',
                     'mode': route.pop('mode', None),
@@ -213,6 +210,7 @@ class SRv6Controller:
             for route in end_routes:
                 # node name
                 route['name'] = name
+                route.setdefault("method", self.default_method)
                 end = {
                     'type': 'seg6local',
                     'action': route.pop('action', None),
@@ -220,7 +218,8 @@ class SRv6Controller:
                     'nh6': route.pop('nh6', None),
                     'srh': route.pop('srh', None),
                     'oif': route.pop('oif', None),
-                    'table': route.pop('table', None)
+                    'table': route.pop('table', None),
+                    'bpf': route.pop('bpf', None),
                 }
                 if end.get('srh'):
                     end['srh'] = {

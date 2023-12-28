@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from grpc.tools import protoc
 
 protoc.main(
